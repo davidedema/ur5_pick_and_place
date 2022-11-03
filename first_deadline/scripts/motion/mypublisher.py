@@ -5,6 +5,9 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
 
 
+# it's not stable now, but it moves the arm
+
+
 class JointStatePublisher():
 
     def __init__(self):
