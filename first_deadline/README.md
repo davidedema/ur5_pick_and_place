@@ -2,6 +2,8 @@
   - [THE CHALLENGE](#the-challenge)
   - [LITTLE STEPS](#little-steps)
   - [SUGGESTIONS](#suggestions)
+  - [EXECUTION](#execution)
+    - [MOVEMENT](#movement)
 
 # FIRST EXPERIENCE 
 ## THE CHALLENGE
@@ -29,3 +31,10 @@ python3 -i ur5_generic.py
 cd ~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli
 python3 -i custom_joint_publisher.py
 ```
+
+## EXECUTION
+Files can be find in the *script* folder, this is a little guide to explain how it works
+### MOVEMENT
+For the movement of the ur5, the topic */command* is subscribed by the **ros_impedance_controller**. Normally the file *params.py* has the field `control_type: position` but in order to use the controller we have to change this field into `control_type: torque`. So we know now that if we wanto to publish in the */command* topic we have to use the flag `torque` in order to use the **ros_impedance_controller**, instead if we want to don't change anything we have to publish in the */ur5/joint_group_pos_controller/command* and we will not use the **ros_impedance_controller**
+  - If using `position` mode topic will be */ur5/joint_group_pos_controller/command*, we have to use the **Float64MultiArrays** msg that it's under the *std_msgs.msg*
+  - If using `torque` mode topic will be */command*, we have to use the **JointState** msg that it's under the *sensor_msgs.msg*
