@@ -1,7 +1,6 @@
 - [FIRST EXPERIENCE](#first-experience)
   - [THE CHALLENGE](#the-challenge)
   - [LITTLE STEPS](#little-steps)
-  - [SUGGESTIONS](#suggestions)
   - [EXECUTION](#execution)
     - [MOVEMENT](#movement)
 
