@@ -4,6 +4,7 @@
   - [SUGGESTIONS](#suggestions)
   - [EXECUTION](#execution)
     - [MOVEMENT](#movement)
+      - [ISSUES](#issues)
 
 # FIRST EXPERIENCE 
 ## THE CHALLENGE
@@ -38,3 +39,45 @@ Files can be find in the *script* folder, this is a little guide to explain how 
 For the movement of the ur5, the topic */command* is subscribed by the **ros_impedance_controller**. Normally the file *params.py* has the field `control_type: position` but in order to use the controller we have to change this field into `control_type: torque`. So we know now that if we wanto to publish in the */command* topic we have to use the flag `torque` in order to use the **ros_impedance_controller**, instead if we want to don't change anything we have to publish in the */ur5/joint_group_pos_controller/command* and we will not use the **ros_impedance_controller**
   - If using `position` mode topic will be */ur5/joint_group_pos_controller/command*, we have to use the **Float64MultiArrays** msg that it's under the *std_msgs.msg*
   - If using `torque` mode topic will be */command*, we have to use the **JointState** msg that it's under the *sensor_msgs.msg*
+
+In order to send joint messages with the last (4/11/22) version of locosim we have to append the gripper information in our msg.
+
+To create the gripper manager at first import it and then use its contructor
+```PYTHON
+from base_controllers.components.gripper_manager import GripperManager
+```
+```PYTHON
+self.gm = GripperManager(False, conf.robot_params['ur5']['dt'])
+```
+Then append the info 
+```PYTHON
+msg.data = np.append(self.q_des, self.gm.getDesGripperJoints())
+```
+---
+
+Added the *keyPub.py* script, it use keyboard input to control the robot. The list of input is:
+
+|MOTION|KEY|
+|------|---|
+|+0.5 first joint|q|
+|-0.5 first joint|a|
+|+0.5 second joint|w|
+|-0.5 second joint|s|
+|+0.5 third joint|e|
+|-0.5 third joint|d|
+|+0.5 fourth joint|r|
+|-0.5 fourth joint|f|
+|+0.5 fifth joint|t|
+|-0.5 fifth joint|g|
+|+0.5 sixth joint|y|
+|-0.5 sixth joint|h|
+|+5 gripper joint|o|
+|-5 gripper joint|p|
+
+---
+
+The *mypublisher.py* script simulate a sin function, it works!
+
+#### ISSUES
+- On the *keyPub.py* the gripper doesn't work as intended
+
