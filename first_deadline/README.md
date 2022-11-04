@@ -4,6 +4,7 @@
   - [EXECUTION](#execution)
     - [MOVEMENT](#movement)
       - [ISSUES](#issues)
+    - [VISION](#vision)
 
 # FIRST EXPERIENCE 
 ## THE CHALLENGE
@@ -68,4 +69,15 @@ The *mypublisher.py* script simulate a sin function, it works!
 
 #### ISSUES
 - On the *keyPub.py* the gripper doesn't work as intended
+  
+### VISION
+For the vision part for now I only attached the camera to the robot and used **OpenCV** to show what the camera see in a separated window. I followed this [tutorial](http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython), the script is in *scripts/vision*. The important thing to know now is that in our ur5 we have 2 cameras, one on the end effector and another one on the first joint. The two cameras publish raw data in rgb or in "depth", the topics where they publish are:
+- EE camera
+  - rgb -> /ee_camera/camera/rgb/image_raw
+  - depth -> /ee_camera/camera/rgb/image_raw
+- Shoulder camera
+  - rgb -> /z_base_camera/camera/rgb/image_raw
+  - depth -> /z_base_camera/camera/depth/image_raw
+
+The message type used is *sensor_msgs/Image*
 
