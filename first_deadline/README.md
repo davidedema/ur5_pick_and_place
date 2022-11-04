@@ -1,7 +1,6 @@
 - [FIRST EXPERIENCE](#first-experience)
   - [THE CHALLENGE](#the-challenge)
   - [LITTLE STEPS](#little-steps)
-  - [SUGGESTIONS](#suggestions)
   - [EXECUTION](#execution)
     - [MOVEMENT](#movement)
       - [ISSUES](#issues)
@@ -21,17 +20,6 @@
   - Try to open and close the gripper
   - Try to move it over the block
   - ...
-## SUGGESTIONS
-- See the *.py* files in the `~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli` folder.
-- Try if it works (if in docker you need 2 terminal: one for running the ur5 generic and one for running the publisher)
-```BASH
-cd ~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli
-python3 -i ur5_generic.py
-```
-```BASH
-cd ~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli
-python3 -i custom_joint_publisher.py
-```
 
 ## EXECUTION
 Files can be find in the *script* folder, this is a little guide to explain how it works
