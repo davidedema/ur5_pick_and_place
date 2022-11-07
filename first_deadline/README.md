@@ -74,10 +74,29 @@ The *mypublisher.py* script simulate a sin function, it works!
 For the vision part for now I only attached the camera to the robot and used **OpenCV** to show what the camera see in a separated window. I followed this [tutorial](http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython), the script is in *scripts/vision*. The important thing to know now is that in our ur5 we have 2 cameras, one on the end effector and another one on the first joint. The two cameras publish raw data in rgb or in "depth", the topics where they publish are:
 - EE camera
   - rgb -> /ee_camera/camera/rgb/image_raw
-  - depth -> /ee_camera/camera/rgb/image_raw
+  - depth -> /ee_camera/camera/depth/image_raw
 - Shoulder camera
   - rgb -> /z_base_camera/camera/rgb/image_raw
   - depth -> /z_base_camera/camera/depth/image_raw
 
 The message type used is *sensor_msgs/Image*
+
+For **positioning** the camera at the top you have to edit (line 70) the *ur5.urdf.xacro* file in the *locosim/robot_description/ur_description/urdf*. 
+
+```XML
+ <xacro:property name="camera_fov" value="1.5"/>
+	  <xacro:property name="camera_width" value="640"/> 
+	  <xacro:property name="camera_height" value="480"/>
+	  <xacro:property name="camera_near" value="0.60"/>
+	  <xacro:property name="camera_far" value="100"/> 
+
+	<xacro:d435_camera 
+		parent="base_link" 
+		name="z_base_camera"
+		camera_plugin="true">  
+		<!-- camera facing the table -->
+		<origin xyz="0.0 0.15 0" rpy="0.0 1.57 1.57"/>
+	</xacro:d435_camera>
+```
+
 
