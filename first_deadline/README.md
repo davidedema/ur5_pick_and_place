@@ -6,6 +6,7 @@
       - [ISSUES](#issues)
     - [VISION](#vision)
 
+
 # FIRST EXPERIENCE 
 ## THE CHALLENGE
 - Build our custom world
@@ -21,6 +22,7 @@
   - Try to open and close the gripper
   - Try to move it over the block
   - ...
+
 
 ## EXECUTION
 Files can be find in the *script* folder, this is a little guide to explain how it works
@@ -99,4 +101,3 @@ For **positioning** the camera at the top you have to edit (line 70) the *ur5.ur
 	</xacro:d435_camera>
 ```
 **The version 4.6.0.66 doesn't work now with .onnx files (import error)**
-
