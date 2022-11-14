@@ -98,5 +98,5 @@ For **positioning** the camera at the top you have to edit (line 70) the *ur5.ur
 		<origin xyz="0.0 0.15 0" rpy="0.0 1.57 1.57"/>
 	</xacro:d435_camera>
 ```
-
+**The version 4.6.0.66 doesn't work now with .onnx files (import error)**
 
