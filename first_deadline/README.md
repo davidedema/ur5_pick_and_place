@@ -1,6 +1,11 @@
 - [FIRST EXPERIENCE](#first-experience)
   - [THE CHALLENGE](#the-challenge)
   - [LITTLE STEPS](#little-steps)
+  - [EXECUTION](#execution)
+    - [MOVEMENT](#movement)
+      - [ISSUES](#issues)
+    - [VISION](#vision)
+
 
 # FIRST EXPERIENCE 
 ## THE CHALLENGE
@@ -17,3 +22,82 @@
   - Try to open and close the gripper
   - Try to move it over the block
   - ...
+
+
+## EXECUTION
+Files can be find in the *script* folder, this is a little guide to explain how it works
+### MOVEMENT
+For the movement of the ur5, the topic */command* is subscribed by the **ros_impedance_controller**. Normally the file *params.py* has the field `control_type: position` but in order to use the controller we have to change this field into `control_type: torque`. So we know now that if we wanto to publish in the */command* topic we have to use the flag `torque` in order to use the **ros_impedance_controller**, instead if we want to don't change anything we have to publish in the */ur5/joint_group_pos_controller/command* and we will not use the **ros_impedance_controller**
+  - If using `position` mode topic will be */ur5/joint_group_pos_controller/command*, we have to use the **Float64MultiArrays** msg that it's under the *std_msgs.msg*
+  - If using `torque` mode topic will be */command*, we have to use the **JointState** msg that it's under the *sensor_msgs.msg*
+
+In order to send joint messages with the last (4/11/22) version of locosim we have to append the gripper information in our msg.
+
+To create the gripper manager at first import it and then use its contructor
+```PYTHON
+from base_controllers.components.gripper_manager import GripperManager
+```
+```PYTHON
+self.gm = GripperManager(False, conf.robot_params['ur5']['dt'])
+```
+Then append the info 
+```PYTHON
+msg.data = np.append(self.q_des, self.gm.getDesGripperJoints())
+```
+---
+
+Added the *keyPub.py* script, it use keyboard input to control the robot. The list of input is:
+
+|MOTION|KEY|
+|------|---|
+|+0.5 first joint|q|
+|-0.5 first joint|a|
+|+0.5 second joint|w|
+|-0.5 second joint|s|
+|+0.5 third joint|e|
+|-0.5 third joint|d|
+|+0.5 fourth joint|r|
+|-0.5 fourth joint|f|
+|+0.5 fifth joint|t|
+|-0.5 fifth joint|g|
+|+0.5 sixth joint|y|
+|-0.5 sixth joint|h|
+|+5 gripper joint|o|
+|-5 gripper joint|p|
+
+---
+
+The *mypublisher.py* script simulate a sin function, it works!
+
+#### ISSUES
+- On the *keyPub.py* the gripper doesn't work as intended
+  
+### VISION
+For the vision part for now I only attached the camera to the robot and used **OpenCV** to show what the camera see in a separated window. I followed this [tutorial](http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython), the script is in *scripts/vision*. The important thing to know now is that in our ur5 we have 2 cameras, one on the end effector and another one on the first joint. The two cameras publish raw data in rgb or in "depth", the topics where they publish are:
+- EE camera
+  - rgb -> /ee_camera/camera/rgb/image_raw
+  - depth -> /ee_camera/camera/depth/image_raw
+- Shoulder camera
+  - rgb -> /z_base_camera/camera/rgb/image_raw
+  - depth -> /z_base_camera/camera/depth/image_raw
+
+The message type used is *sensor_msgs/Image*
+
+For **positioning** the camera at the top you have to edit (line 70) the *ur5.urdf.xacro* file in the *locosim/robot_description/ur_description/urdf*. 
+
+```XML
+ <xacro:property name="camera_fov" value="1.5"/>
+	  <xacro:property name="camera_width" value="640"/> 
+	  <xacro:property name="camera_height" value="480"/>
+	  <xacro:property name="camera_near" value="0.60"/>
+	  <xacro:property name="camera_far" value="100"/> 
+
+	<xacro:d435_camera 
+		parent="base_link" 
+		name="z_base_camera"
+		camera_plugin="true">  
+		<!-- camera facing the table -->
+		<origin xyz="0.0 0.15 0" rpy="0.0 1.57 1.57"/>
+	</xacro:d435_camera>
+```
+**The version 4.6.0.66 doesn't work now with .onnx files (import error)**
