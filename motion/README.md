@@ -4,7 +4,7 @@ This folder contains a ros package containing all the motion planning and kinema
 - Inverse kinematic
 - Jacobian matrix
 
-All the functions are implemented in the header file `kinematics.h` and the implementation is in the file `kinematics.cpp`, all it's documented with doxygen.
+All the functions are implemented in the header file `kinematics.h`, all it's documented with doxygen.
 
 In the src folder there are our motion planning algorithms:
 - translated testUR57 has to be fixed in some points
