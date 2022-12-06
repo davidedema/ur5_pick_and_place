@@ -12,7 +12,6 @@ struct frame
     Eigen::Vector3f xyz;
 };
 
-//submatrix of the transformation matrix
 /**
  * @brief create the transformation matrix for the first joint
  * 
@@ -120,9 +119,9 @@ Eigen::Matrix4f t54f(std::complex<float> th5)
     // Vector of D distances (meters)
     Eigen::VectorXf d(6);
     d << 0.1625, 0, 0, 0.1333, 0.0997, 0.0996;
-    aux << std::real(cos(th5)), std::real(-sin(th5)), 0, a(3),
-        0, 0, 1, 0,
-        std::real(-sin(th5)), std::real(-cos(th5)), 0, 0,
+    aux << std::real(cos(th5)), std::real(-sin(th5)), 0, 0,
+        0, 0, 1, -d(4),
+        std::real(sin(th5)), std::real(cos(th5)), 0, 0,
         0, 0, 0, 1;
 
     return aux;
@@ -143,9 +142,9 @@ Eigen::Matrix4f t65f(std::complex<float> th6)
     // Vector of D distances (meters)
     Eigen::VectorXf d(6);
     d << 0.1625, 0, 0, 0.1333, 0.0997, 0.0996;
-    aux << std::real(cos(th6)), std::real(-sin(th6)), 0, a(4),
-        std::real(sin(th6)), std::real(cos(th6)), 0, 0,
+    aux << std::real(cos(th6)), std::real(-sin(th6)), 0, 0,
         0, 0, 1, d(5),
+        std::real(-sin(th6)), std::real(-cos(th6)), 0, 0,
         0, 0, 0, 1;
 
     return aux;
