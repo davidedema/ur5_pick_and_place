@@ -41,7 +41,7 @@ Eigen::Vector3f phid(float t, Eigen::Vector3f phief, Eigen::Vector3f phie0){
     if(t>1){
         return phief;
     }
-    else{//phie0(0), (float)(cos(2*M_PI*t)), (float)(sin(2*M_PI*t))
+    else{
         return t*phief+(1-t)*phie0;
     }
 }

@@ -29,11 +29,11 @@ install(TARGETS finalDiff
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-add_executable(newInv src/newInv.cpp)
+add_executable(invDiffKinematics src/invDiffKinematics.cpp)
 
-target_link_libraries(newInv ${catkin_LIBRARIES})
+target_link_libraries(invDiffKinematics ${catkin_LIBRARIES})
 
-install(TARGETS newInv
+install(TARGETS invDiffKinematics
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
