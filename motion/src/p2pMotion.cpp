@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include "kinematics.h"
-#include <std_msgs/Float64MultiArray.h> 
+#include <std_msgs/Float64MultiArray.h>
 #include "ros/ros.h"
 
 Eigen::MatrixXf p2pMotionPlan(frame start, frame goal, float minT, float maxT, float dt)
@@ -83,13 +83,13 @@ int main(int argc, char **argv)
         jointState_msg_robot.data[6] = 0;
         jointState_msg_robot.data[7] = 0;
         jointState_msg_robot.data[8] = 0;
-        
+
         pub_des_jstate.publish(jointState_msg_robot);
         ros::spinOnce();
         loop_rate.sleep();
     }
 
-    
+
 
     return 0;
 }
