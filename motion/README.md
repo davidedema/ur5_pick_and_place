@@ -7,8 +7,8 @@ This folder contains a ros package containing all the motion planning and kinema
 All the functions are implemented in the header file `kinematics.h`, all it's documented with doxygen.
 
 In the src folder there are our motion planning algorithms:
-- translated testUR57 has to be fixed in some points
-- going to translate testUR58
+- translated testUR57 has to be fixed in some points, this move **linear** from start to goal
+- translated but not finished testUR58, this move **quadratic** from start to goal
   
 ## Forward Kinematic
 The forward kinematic is used to calculate the position of the end effector of the robot. The function is called with the current joint angles. The function returns the position and orientation of the end effector in the base frame.
