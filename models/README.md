@@ -1,6 +1,9 @@
 -add these things in locosim/ros_impedance_controller/worlds/models
+
 -change in locosim/robot_control/lab_exericses/lab_palopoli/ur5_generic.py the file .world with lego.world
+
 -to add new lego manually copy and paste 
+
 ```
 <include>
       <name>**yourblockname**</name>
