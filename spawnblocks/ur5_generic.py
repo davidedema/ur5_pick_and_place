@@ -74,6 +74,7 @@ class Ur5Generic(BaseControllerFixed):
         
         def changeposition (myroot):
             counter = 0  # counter for the number of iterations
+            listposition = []; # list of the position of the objects
             # iterating through the price values.
             for position in myroot.iter('pose'):
                 #do noting on the first and second iteration
@@ -82,10 +83,24 @@ class Ur5Generic(BaseControllerFixed):
                     continue
                 print("old:"+position.text)
                 # create nwe random position
-                new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.15, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
-                position.text = new_position
-                counter = counter + 1
-                print("new:"+position.text)
+            new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
+            while (checkposition(new_position, listposition)):
+                new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
+
+            position.text = new_position        
+            listposition.append(position.text)
+            print("array:")
+            print(listposition)
+            counter = counter + 1
+            print(position.text)
+
+        def checkposition(actpose, listposition):
+            print ("check")
+            for pose in listposition:
+                if (actpose==pose):
+                    return True
+                else:
+                    return False
        
         #get user input
         
@@ -133,7 +148,7 @@ class Ur5Generic(BaseControllerFixed):
             '''
 
 
-
+        os.system("cd /home/giulio/ros_ws; catkin_make install; source devel/setup.bash")
         #self.world_name = 'lego.world'
         #self.world_name = None # only the workbench
         #self.world_name = 'empty.world'
