@@ -148,7 +148,7 @@ class Ur5Generic(BaseControllerFixed):
             '''
 
 
-        os.system("cd /home/giulio/ros_ws; catkin_make install; source devel/setup.bash")
+        os.system("cd ~/ros_ws; catkin_make install; source install/setup.bash")
         #self.world_name = 'lego.world'
         #self.world_name = None # only the workbench
         #self.world_name = 'empty.world'
