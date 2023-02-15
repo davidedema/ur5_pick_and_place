@@ -299,15 +299,15 @@ void sendJointState(VectorXf q)
     {
         if (grasp)
         {            
-            jointState_msg_robot.data[6] = mapToGripperJoints(50);
-            jointState_msg_robot.data[7] = mapToGripperJoints(50);
-            jointState_msg_robot.data[8] = mapToGripperJoints(50);
+            jointState_msg_robot.data[6] = mapToGripperJoints(45);
+            jointState_msg_robot.data[7] = mapToGripperJoints(45);
+            jointState_msg_robot.data[8] = mapToGripperJoints(45);
         }
         else
         {
-            jointState_msg_robot.data[6] = mapToGripperJoints(110);
-            jointState_msg_robot.data[7] = mapToGripperJoints(110);
-            jointState_msg_robot.data[8] = mapToGripperJoints(110);
+            jointState_msg_robot.data[6] = mapToGripperJoints(100);
+            jointState_msg_robot.data[7] = mapToGripperJoints(100);
+            jointState_msg_robot.data[8] = mapToGripperJoints(100);
         }
     }
     else 
@@ -357,47 +357,47 @@ void move()
     switch (class_id)
         {
         case 0:
-            target << .4, 0, .85;
+            target << .4, 0, .82;
             break;
 
         case 1:
-            target << .4, -.05, .85;
+            target << .4, -.05, .82;
             break;
 
         case 2:
-            target << .4, -.1, .85;
+            target << .4, -.1, .82;
             break;
 
         case 3:
-            target << .4, -.15, .85;
+            target << .4, -.15, .82;
             break;
 
         case 4:
-            target << .4, -.20, .85;
+            target << .4, -.20, .82;
             break;
 
         case 5:
-            target << .4, -.25, .85;
+            target << .4, -.25, .82;
             break;
 
         case 6:
-            target << .4, -.30, .85;
+            target << .4, -.30, .82;
             break;
 
         case 7:
-            target << .4, -.35, .85;
+            target << .4, -.35, .82;
             break;
 
         case 8:
-            target << .4, -.40, .85;
+            target << .4, -.40, .82;
             break;
 
         case 9:
-            target << .3, -.40, .85;
+            target << .3, -.40, .82;
             break;
 
         case 10:
-            target << .3, -.35, .85;
+            target << .3, -.35, .82;
             break;
 
         default:
