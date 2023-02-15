@@ -87,7 +87,7 @@ int main(int argc, char **argv)
                 block_pos = worldToBase(block_pos);
                 msg.x = block_pos(0);
                 msg.y = block_pos(1);
-                msg.z = block_pos(2);
+                msg.z = 0.85;
                 msg.roll = block_rot(0);
                 msg.pitch = block_rot(1);
                 msg.yaw = block_rot(2);
