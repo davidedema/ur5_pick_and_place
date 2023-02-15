@@ -15,6 +15,18 @@ if str(ROOT) not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 VISION_PATH = os.path.abspath(os.path.join(ROOT, ".."))
 
+LEGO_NAMES = [  'X1-Y1-Z2',
+                'X1-Y2-Z1',
+                'X1-Y2-Z2',
+                'X1-Y2-Z2-CHAMFER',
+                'X1-Y2-Z2-TWINFILLET',
+                'X1-Y3-Z2',
+                'X1-Y3-Z2-FILLET',
+                'X1-Y4-Z1',
+                'X1-Y4-Z2',
+                'X2-Y2-Z2',
+                'X2-Y2-Z2-FILLET']
+
 # -----------------------------------------------------------------------------
 
 class LegoDetect:
@@ -47,14 +59,8 @@ class LegoDetect:
 
         self.img = Image.open(self.img_path)
 
-        # self.img = cv.imread(self.img_path)
-        # img2 = self.img[:,:,::-1]
-        # cv.imshow("Image window", img2)
-        # cv.waitKey(3)
-
         print(self.img_path)
         print('img size:', self.img.width, 'x', self.img.height)
-        # print('img size:', self.img.shape[1], 'x', self.img.shape[0])
         self.calculateBoundingBox()
 
     def calculateBoundingBox(self):
@@ -78,6 +84,7 @@ class Lego:
 
     def __init__(self, name, conf, x1, y1, x2, y2, img_source_path):
         self.name = name
+        self.class_id = LEGO_NAMES.index(name)
         self.confidence = conf
         self.xmin = x1
         self.ymin = y1
@@ -104,6 +111,7 @@ class Lego:
         print()
         display(self.img)
         print('class =', self.name)
+        print('id =', self.class_id)
         print('confidence =', '%.2f' %self.confidence)
         print('center_point =', self.center_point)
         print('center_point_uv =', self.center_point_uv)

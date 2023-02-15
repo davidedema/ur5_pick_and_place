@@ -18,7 +18,7 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-IMG = os.path.abspath(os.path.join(ROOT, "detect.png"))
+IMG = os.path.abspath(os.path.join(ROOT, "log_last_detect.png"))
 
 w_R_c = np.matrix([[0, -0.499, 0.866], [-1, 0, 0], [0, -0.866, -0.499]])
 x_c = np.array([-0.9, 0.24, -0.35])
@@ -88,7 +88,7 @@ class Vision:
 
             # Create msg for pos_pub
             pos_msg = pos()
-            pos_msg.class_id = 1
+            pos_msg.class_id = lego.class_id
             pos_msg.x = lego.point_world[0, 0]
             pos_msg.y = lego.point_world[0, 1]
             pos_msg.z = lego.point_world[0, 2]
@@ -97,7 +97,7 @@ class Vision:
             pos_msg.yaw = 0
             self.pos_msg_list.append(pos_msg)
             
-        print('DONE DETECTING LEGO! VISION READY!')
+        print('\nVISION DONE DETECTING LEGO!\nREADY FOR MOTION!')
         self.vision_ready = 1
         self.send_pos_msg()
 
@@ -110,9 +110,9 @@ class Vision:
         try:
             pos_msg = self.pos_msg_list.pop()
             self.pos_pub.publish(pos_msg)
-            print('Position published:\n', pos_msg)
+            print('\nPosition published:\n', pos_msg)
         except IndexError:
-            print('FINISH ALL LEGO')
+            print('\nFINISH ALL LEGO\n')
             
             
 
