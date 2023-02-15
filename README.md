@@ -1,29 +1,81 @@
-# Robotic project
-For now use the repo to push code from the assignment and ideas for our project
+<p align='center'>
+    <h2 align="center">Fundaments of Robotics Project</h2>
+    <p align="center">
+    Project for the Fundaments of Robotics course at the University of Trento
+    </p>
+    <p align='center'>
+    Developed by:<br>
+    De Martini Davide <br>
+    Duong Anh Tu <br>
+    Zamberlan Giulio
+    </p>   
+</p>
 
-## Git tutorial
-At first clone this repository 
-```BASH
-git clone git@github.com:davidedema/robotic_project.git
-```
-Then add the remote repository (in order to push the changes in github)
-```BASH
-git remote add robotics git@github.com:davidedema/robotic_project.git
-```
-Now crete your own local branch
-```BASH
-git branch yourname_develop
-```
-To start working in your branch type
-```BASH
-git checkout yourname_develop
-```
-When you finish to modify something and you want to track in your local branch type
-```
-git add filenames
-git commit -m "Type what you have changed"
-git push origin yourname_develop
-```
-Type the last command only if you want to publish on github
+## Table of Contents
 
-Online you can find better git tutorials, this explain only the essential.
+- [Table of Contents](#table-of-contents)
+- [Project Description](#project-description)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [How to run the project](#how-to-run-the-project)
+  - [Setup](#setup)
+  - [Running](#running)
+
+
+## Project Description
+The goal of this project was to develop an autonomous robot that can perform pick and place tasks. The manipulator is an Ur5 that uses a Zed cam for the perception. The pick and place task consists in picking different types of "lego" blocks and placing the in their corresponding position. The robot is able to detect the blocks and to perform the pick and place task autonomously.
+
+## Project Structure
+The project is structured as follows:
+- `motion` -> contains the catkin project for the motion planner and the task manager
+  - `include` -> has the header files
+  - `msg` -> has the custom messages
+  - `src` -> has the source files
+  - CMakeLists.txt -> It is the CMake file for the project
+  - pakage.xml -> It is the package file for the project 
+- `vision` -> contains the visions scripts and weights
+  - `dataset` -> contains the dataset
+  - `scripts` -> contains the scripts for the vision
+  - `weights` -> contains the weights 
+  
+## Installation
+The project has been developed and tested on Ubuntu 20.04 with ROS Noetic, also we used the [locosim](https://github.com/mfocchi/locosim) repository for the ur5 simulation. The installation of the project is the following:
+1) Clone the [locosim](https://github.com/mfocchi/locosim) repository and follow the instructions to install it
+2) Clone this repository in the `ros_ws/src` folder of the catkin workspace
+3) Compile the project with the following command:
+```BASH
+cd ~/ros_ws
+catkin_make install
+source install/setup.bash
+```
+4) Install the dependencies with the following command:
+```BASH
+```
+
+## How to run the project
+### Setup
+At first we have to modify a file in the locosim project in order to be able to use the gripper. To do that we have to modify the file `~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli/params.py`
+and change the line 32:
+```PYTHON
+'gripper_sim': True, 
+```
+Now we are able to run the project.
+### Running
+For running the project you need to run the following commands:
+1) Run in one window the locosim simulation with the following command:
+```BASH
+python3 ~/ros_ws/src/locosim/robot_control/lab_exercises/lab_palopoli/ur5_generic.py
+```
+2) Run in another window the task manager with the following command:
+```BASH
+rosrun motion taskManager
+```
+3) Run in another window the motion planner with the following command:
+```BASH
+rosrun motion motionPlanner
+```
+4) Run in another window the vision node with the following command:
+```BASH
+cd ~/ros_ws/src/robotics_project/vision/scripts
+python3 vision.py
+```
