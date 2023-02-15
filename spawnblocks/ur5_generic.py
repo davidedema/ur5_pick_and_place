@@ -83,16 +83,16 @@ class Ur5Generic(BaseControllerFixed):
                     continue
                 print("old:"+position.text)
                 # create nwe random position
-            new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
-            while (checkposition(new_position, listposition)):
                 new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
+                while (checkposition(new_position, listposition)):
+                    new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
 
-            position.text = new_position        
-            listposition.append(position.text)
+                position.text = new_position        
+                listposition.append(position.text)
+                counter = counter + 1
+                print(position.text)
             print("array:")
             print(listposition)
-            counter = counter + 1
-            print(position.text)
 
         def checkposition(actpose, listposition):
             print ("check")
@@ -337,9 +337,9 @@ class Ur5Generic(BaseControllerFixed):
         points_list = []
         for data in point_cloud2.read_points(msg, field_names=['x','y','z'], skip_nans=False, uvs=[(640, 360)]):
             points_list.append([data[0], data[1], data[2]])
-        print("Data Optical frame: ", points_list)
+        #print("Data Optical frame: ", points_list)
         pointW = self.w_R_c.dot(points_list[0]) + self.x_c + self.base_offset
-        print("Data World frame: ", pointW)
+         #print("Data World frame: ", pointW)
 
 def talker(p):
     p.start()
