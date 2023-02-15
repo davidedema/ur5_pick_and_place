@@ -37,7 +37,7 @@ class LegoDetect:
         '''
         self.weights_path = os.path.join(VISION_PATH, "weights/best.pt")
         self.model = torch.hub.load('ultralytics/yolov5', 'custom', self.weights_path)
-        self.model.conf = 0.5
+        self.model.conf = 0.7
         self.model.multi_label = True
         self.model.iou = 0.5
         self.lego_list = []
