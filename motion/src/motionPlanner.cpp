@@ -411,6 +411,10 @@ void move()
     {
         loop_rate.sleep();
     }
+    // lift a little bit
+    target(2) = 0.65;
+    invDiffKinematicControlSimComplete(target, pose.orientation, dt);
+    sendJointState(TH0);
     // go to the middle point
     target << 0, -0.4, 0.6;
     invDiffKinematicControlSimComplete(target, pose.orientation, dt);
