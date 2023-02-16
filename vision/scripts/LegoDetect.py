@@ -59,6 +59,7 @@ class LegoDetect:
             if choice == '1':
                 print('Detecting again...')
                 self.detect(self.img_path)
+                choice = '0'
 
             if choice == '2':
                 print('Draw RegionOfInterest')
@@ -66,6 +67,7 @@ class LegoDetect:
                 roi.run()
                 print('Detecting RegionOfInterest...')
                 self.detect(IMG_ROI)
+                choice = '0'
 
         self.calculateBoundingBox()
 
