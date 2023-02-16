@@ -312,19 +312,7 @@ void sendJointState(VectorXf q)
             jointState_msg_robot.data[8] = mapToGripperJoints(100);
         }
     }
-    else 
-    {
-        if (grasp)
-        {
-            //gripper_diameter.request.data = 50;
-            //client.call(gripper_diameter);
-        }
-        else
-        {
-            //gripper_diameter.request.data = 110;
-            //client.call(gripper_diameter);
-        }
-    }
+
     pub_des_jstate.publish(jointState_msg_robot);
     loop_rate.sleep();
 }
@@ -347,7 +335,14 @@ void move()
     invDiffKinematicControlSimComplete(target, pose.orientation, dt);
     // grasp
     grasp = 1;
-    sendJointState(TH0);
+    if (real_robot)
+    {
+        graspit();
+    }
+    else
+    {
+        sendJointState(TH0);
+    }
     for (int i = 0; i < 50; i++)
     {
         loop_rate.sleep();
@@ -408,7 +403,14 @@ void move()
     invDiffKinematicControlSimComplete(target, pose.orientation, dt);
     // ungrasp
     grasp = 0;
-    sendJointState(TH0);
+    if (real_robot)
+    {
+        graspit();
+    }
+    else
+    {
+        sendJointState(TH0);
+    }
     for (int i = 0; i < 50; i++)
     {
         loop_rate.sleep();
@@ -453,4 +455,22 @@ void ack()
         loop_rate.sleep();
     }
     ack_pos.publish(ack);
+}
+
+/**
+ * @brief     This function is used to map the gripper joints to the real robot
+ * 
+ */
+void graspit()
+{
+    if (grasp)
+    {
+        gripper_diameter.request.data = 50;
+        client.call(gripper_diameter);
+    }
+    else
+    {
+        gripper_diameter.request.data = 110;
+        client.call(gripper_diameter);
+    }
 }
