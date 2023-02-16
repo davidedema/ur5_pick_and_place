@@ -160,10 +160,10 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
     VectorXf ve(6);
 
     Matrix3f kp; // position gain
-    kp = Matrix3f::Identity() * 5;
+    kp = Matrix3f::Identity() * 1;
 
     Matrix3f kphi; // orientation gain
-    kphi = Matrix3f::Identity() * 30;
+    kphi = Matrix3f::Identity() * 40;
 
     if (error_o.norm() > 1.)
     {
@@ -199,13 +199,14 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
  */
 Vector3f pd(double t, Vector3f xef, Vector3f xe0)
 {
-    if (t > 1)
+    double t_norm = t / 3;
+    if (t_norm > 1)
     {
         return xef;
     }
     else
     {
-        return t * xef + (1 - t) * xe0;
+        return t_norm * xef + (1 - t_norm) * xe0;
     }
 }
 
@@ -243,7 +244,7 @@ void invDiffKinematicControlSimComplete(Vector3f xef, Vector3f phief, float dt)
     Vector3f vd; // desired linear velocity                                                                                                                  // get the inverse kinematics matrix
 
     // loop
-    for (double i = dt; i <= 1; i += dt)
+    for (double i = dt; i <= 3; i += dt)
     {
         now = directKin(qk); // get the current frame
 
