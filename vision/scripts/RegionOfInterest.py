@@ -9,8 +9,6 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-IMG = os.path.abspath(os.path.join(ROOT, "img_ZED_cam.png"))
-IMG_ROI = os.path.abspath(os.path.join(ROOT, "img_ROI.png"))
 
 
 class RegionOfInterest:
@@ -32,6 +30,7 @@ class RegionOfInterest:
             self.drawing = True
             self.start = (x, y)
             self.end = (x, y)
+            print('x =', self.start[0], 'y =', self.start[1])
         elif event == cv2.EVENT_MOUSEMOVE:
             if self.drawing == True:
                 self.end = (x, y)
