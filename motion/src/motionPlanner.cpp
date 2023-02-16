@@ -13,7 +13,7 @@
 
 // ----------- DEFINES ----------- //
 
-#define LOOP_RATE 100
+#define LOOP_RATE 1000
 #define JOINTS 9
 
 // ----------- NAMESPACES ----------- //
@@ -160,14 +160,14 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
     VectorXf ve(6);
 
     Matrix3f kp; // position gain
-    kp = Matrix3f::Identity() * 1;
+    kp = Matrix3f::Identity() * 5;
 
     Matrix3f kphi; // orientation gain
-    kphi = Matrix3f::Identity() * 40;
+    kphi = Matrix3f::Identity() * 30;
 
-    if (error_o.norm() > 1.)
+    if (error_o.norm() > 0.1)
     {
-        error_o = 0.1 * error_o.normalized();
+        error_o = 1 * error_o.normalized();
     }
 
     ve << (vd + kp * (xd - xe)), (kphi * error_o);
@@ -177,11 +177,11 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
     {
         if (qdot(i) > M_PI)
         {
-            qdot(i) = 2.5;
+            qdot(i) = 1.5;
         }
         else if (qdot(i) < -M_PI)
         {
-            qdot(i) = -2.5;
+            qdot(i) = -1.5;
         }
     }
 
@@ -199,7 +199,7 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
  */
 Vector3f pd(double t, Vector3f xef, Vector3f xe0)
 {
-    double t_norm = t / 3;
+    double t_norm = t / 6;
     if (t_norm > 1)
     {
         return xef;
@@ -244,7 +244,7 @@ void invDiffKinematicControlSimComplete(Vector3f xef, Vector3f phief, float dt)
     Vector3f vd; // desired linear velocity                                                                                                                  // get the inverse kinematics matrix
 
     // loop
-    for (double i = dt; i <= 3; i += dt)
+    for (double i = dt; i <= 6; i += dt)
     {
         now = directKin(qk); // get the current frame
 
@@ -296,6 +296,7 @@ void sendJointState(VectorXf q)
     {
         jointState_msg_robot.data[i] = q(i);
     }
+    jointState_msg_robot.data[5] = 3.49;
     if (!real_robot)
     {
         if (grasp)
@@ -315,13 +316,13 @@ void sendJointState(VectorXf q)
     {
         if (grasp)
         {
-            gripper_diameter.request.data = 50;
-            client.call(gripper_diameter);
+            //gripper_diameter.request.data = 50;
+            //client.call(gripper_diameter);
         }
         else
         {
-            gripper_diameter.request.data = 110;
-            client.call(gripper_diameter);
+            //gripper_diameter.request.data = 110;
+            //client.call(gripper_diameter);
         }
     }
     pub_des_jstate.publish(jointState_msg_robot);
@@ -336,7 +337,7 @@ void move()
 {
     ros::Rate loop_rate(LOOP_RATE);
     float dt; // time step
-    dt = 0.01;
+    dt = 0.001;
     Vector3f target;
     target << pose.position(0), pose.position(1), .6;
     // go above the desired position
@@ -430,7 +431,7 @@ void move()
 void startingPosition()
 {
     float dt; // time step
-    dt = 0.01;
+    dt = 0.001;
     Vector3f target;
     target << -.4, -.4, .6;
     invDiffKinematicControlSimComplete(target, pose.orientation, dt);
