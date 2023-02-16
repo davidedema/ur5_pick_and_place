@@ -7,6 +7,7 @@ import numpy as np
 import cv2 as cv
 from IPython.display import display
 from PIL import Image
+from RegionOfInterest import RegionOfInterest
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]
@@ -14,6 +15,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 VISION_PATH = os.path.abspath(os.path.join(ROOT, ".."))
+IMG_ROI = os.path.abspath(os.path.join(ROOT, "log/img_ROI.png"))
 
 LEGO_NAMES = [  'X1-Y1-Z2',
                 'X1-Y2-Z1',
@@ -31,37 +33,49 @@ LEGO_NAMES = [  'X1-Y1-Z2',
 
 class LegoDetect:
 
-    def __init__(self):
-        '''
-        yolov5 detection using custom trained weights: ../weights/best.pt
-        '''
+    def __init__(self, img_path):
+       
         self.weights_path = os.path.join(VISION_PATH, "weights/best.pt")
         self.model = torch.hub.load('ultralytics/yolov5', 'custom', self.weights_path)
         self.model.conf = 0.7
         self.model.multi_label = True
         self.model.iou = 0.5
+        self.img_path = img_path
         self.lego_list = []
+        self.detect(self.img_path)
 
-    def setConfidence(self, conf):
-        '''
-        Set confidence threshold. Call before detect()
-        '''
-        self.model.conf = conf
+        choice = '0'
+        while True:
+            while (choice != '1' or choice != '2' or choice != ''):
+                ask =  ('\nContinue     (ENTER)'
+                        '\nDetect again (1)',
+                        '\nDetect ROI   (2)',
+                        '\nchoice ----> ')
+                choice = input(ask)
+
+            if choice == '':
+                break
+
+            if choice == '1':
+                self.detect(self.detect(self.img_path))
+
+            if choice == '2':
+                roi = RegionOfInterest(img_path, IMG_ROI)
+                roi.run()
+                self.detect(IMG_ROI)
+
+        self.calculateBoundingBox()
 
     def detect(self, img_path):
         '''
         Detect lego
         '''
         self.lego_list.clear()
-        self.img_path = img_path
-        self.results = self.model(self.img_path)
+        self.results = self.model(img_path)
         self.results.show()
-
-        self.img = Image.open(self.img_path)
-
-        print(self.img_path)
-        print('img size:', self.img.width, 'x', self.img.height)
-        self.calculateBoundingBox()
+        img = Image.open(img_path)
+        print(img_path)
+        print('img size:', img.width, 'x', img.height)
 
     def calculateBoundingBox(self):
         '''
@@ -125,8 +139,6 @@ class Lego:
 # python3 LegoDetect.py /path/to/img...
 
 if __name__ == '__main__':
-    img_path = sys.argv[1]
-    legoDetect = LegoDetect()
-    legoDetect.detect(img_path)
+    legoDetect = LegoDetect(img_origin_path=sys.argv[1])
     for lego in legoDetect.lego_list:
         lego.show()

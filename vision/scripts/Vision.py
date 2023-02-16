@@ -18,7 +18,7 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-IMG = os.path.abspath(os.path.join(ROOT, "log_last_detect.png"))
+IMG_ZED = os.path.abspath(os.path.join(ROOT, "log/img_ZED_cam.png"))
 
 w_R_c = np.matrix([[0, -0.499, 0.866], [-1, 0, 0], [0, -0.866, -0.499]])
 x_c = np.array([-0.9, 0.24, -0.35])
@@ -58,9 +58,8 @@ class Vision:
         except CvBridgeError as e:
             print(e)
 
-        cv.imwrite(IMG, cv_image)
-        legoDetect = LegoDetect()
-        legoDetect.detect(IMG)
+        cv.imwrite(IMG_ZED, cv_image)
+        legoDetect = LegoDetect(IMG_ZED)
         self.lego_list = legoDetect.lego_list
 
         self.allow_receive_pointcloud = True
@@ -126,6 +125,4 @@ if __name__ == '__main__':
         ros.spin()
     except KeyboardInterrupt:
         print("Shutting down")
-        if os.path.exists(IMG):
-            os.remove(IMG)
     
