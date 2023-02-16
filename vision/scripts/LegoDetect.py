@@ -46,10 +46,10 @@ class LegoDetect:
 
         choice = '0'
         while True:
-            while (choice != '1' or choice != '2' or choice != ''):
-                ask =  ('\nContinue     (ENTER)'
-                        '\nDetect again (1)',
-                        '\nDetect ROI   (2)',
+            while (choice != '1' and choice != '2' and choice != ''):
+                ask =  ('\nContinue     (ENTER)'+
+                        '\nDetect again (1)'+
+                        '\nDetect ROI   (2)'+
                         '\nchoice ----> ')
                 choice = input(ask)
 
@@ -57,11 +57,14 @@ class LegoDetect:
                 break
 
             if choice == '1':
-                self.detect(self.detect(self.img_path))
+                print('Detecting again...')
+                self.detect(self.img_path)
 
             if choice == '2':
+                print('Draw RegionOfInterest')
                 roi = RegionOfInterest(img_path, IMG_ROI)
                 roi.run()
+                print('Detecting RegionOfInterest...')
                 self.detect(IMG_ROI)
 
         self.calculateBoundingBox()
