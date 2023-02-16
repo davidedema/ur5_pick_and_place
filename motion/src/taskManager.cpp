@@ -26,7 +26,7 @@ ros::Subscriber sub_vision;
 ros::Subscriber sub_ack;
 ros::Subscriber sub_stop;
 int vision_received = 0;
-int vision_on = 1;
+int vision_on = 0;
 Vector3f block_pos;
 Vector3f block_rot;
 int block_class;
