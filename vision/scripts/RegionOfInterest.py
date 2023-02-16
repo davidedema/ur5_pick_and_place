@@ -22,8 +22,8 @@ class RegionOfInterest:
         self.start = (-1, -1)
         self.end = (-1, -1)
 
-        cv2.namedWindow('image')
-        cv2.setMouseCallback('image', self.draw_box)
+        # cv2.namedWindow('image')
+        # cv2.setMouseCallback('image', self.draw_box)
 
     def draw_box(self, event, x, y, flags, params):
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -61,6 +61,34 @@ class RegionOfInterest:
                 cv2.waitKey(0)
                 break
 
+        cv2.destroyAllWindows()
+
+    def run_auto(self):
+        
+        mask = np.zeros(self.img.shape[0:2], dtype=np.uint8)
+        # SIM CAM
+        points = np.array([[[845,409], [1201,412], [1545,913], [658, 921]]])
+        # REAL CAM
+        # points = np.array([[[457,557], [555,272], [779,267], [960,532]]])
+        #method 1 smooth region
+        cv2.drawContours(mask, [points], -1, (255, 255, 255), -1, cv2.LINE_AA)
+        #method 2 not so smooth region
+        # cv2.fillPoly(mask, points, (255))
+        res = cv2.bitwise_and(self.img,self.img,mask = mask)
+        rect = cv2.boundingRect(points) # returns (x,y,w,h) of the rect
+        cropped = res[rect[1]: rect[1] + rect[3], rect[0]: rect[0] + rect[2]]
+        ## crate the white background of the same size of original image
+        wbg = np.ones_like(self.img, np.uint8)*255
+        cv2.bitwise_not(wbg,wbg, mask=mask)
+        # overlap the resulted cropped image on the white background
+        dst = wbg+res
+        # cv2.imshow('Original',self.img)
+        # cv2.imshow("Mask",mask)
+        # cv2.imshow("Cropped", cropped )
+        cv2.imshow("Samed Size Black Image", res)
+        cv2.imwrite(self.output_path, res)
+        # cv2.imshow("Samed Size White Image", dst)
+        # cv2.waitKey(0)
         cv2.destroyAllWindows()
 
 if __name__ == '__main__':

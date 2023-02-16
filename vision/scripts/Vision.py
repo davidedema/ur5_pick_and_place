@@ -24,6 +24,8 @@ w_R_c = np.matrix([[0, -0.499, 0.866], [-1, 0, 0], [0, -0.866, -0.499]])
 x_c = np.array([-0.9, 0.24, -0.35])
 base_offset = np.array([0.5, 0.35, 1.75])
 
+OFF_SET = 0.86 + 0.1
+
 # -----------------------------------------------------------------------------------------
 
 class Vision:
@@ -94,7 +96,9 @@ class Vision:
             pos_msg.pitch = 0
             pos_msg.roll = 0
             pos_msg.yaw = 0
-            self.pos_msg_list.append(pos_msg)
+
+            if pos_msg.z < OFF_SET:
+                self.pos_msg_list.append(pos_msg)
             
         print('\nVISION DONE DETECTING LEGO!\nREADY FOR MOTION!')
         self.vision_ready = 1

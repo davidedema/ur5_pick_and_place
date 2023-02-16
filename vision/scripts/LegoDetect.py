@@ -42,32 +42,40 @@ class LegoDetect:
         self.model.iou = 0.5
         self.img_path = img_path
         self.lego_list = []
-        self.detect(self.img_path)
+        
+        # self.detect(self.img_path)
 
-        choice = '0'
-        while True:
-            while (choice != '1' and choice != '2' and choice != ''):
-                ask =  ('\nContinue     (ENTER)'+
-                        '\nDetect again (1)'+
-                        '\nDetect ROI   (2)'+
-                        '\nchoice ----> ')
-                choice = input(ask)
+        # choice = '0'
+        # while True:
+        #     while (choice != '1' and choice != '2' and choice != ''):
+        #         ask =  ('\nContinue     (ENTER)'+
+        #                 '\nDetect again (1)'+
+        #                 '\nDetect ROI   (2)'+
+        #                 '\nchoice ----> ')
+        #         choice = input(ask)
 
-            if choice == '':
-                break
+        #     if choice == '':
+        #         break
 
-            if choice == '1':
-                print('Detecting again...')
-                self.detect(self.img_path)
-                choice = '0'
+        #     if choice == '1':
+        #         print('Detecting again...')
+        #         self.detect(self.img_path)
+        #         choice = '0'
 
-            if choice == '2':
-                print('Draw RegionOfInterest')
-                roi = RegionOfInterest(img_path, IMG_ROI)
-                roi.run()
-                print('Detecting RegionOfInterest...')
-                self.detect(IMG_ROI)
-                choice = '0'
+        #     if choice == '2':
+        #         print('Draw RegionOfInterest')
+        #         roi = RegionOfInterest(img_path, IMG_ROI)
+        #         roi.run()
+        #         print('Detecting RegionOfInterest...')
+        #         self.detect(IMG_ROI)
+        #         choice = '0'
+
+        print('Draw RegionOfInterest')
+        roi = RegionOfInterest(img_path, IMG_ROI)
+        # roi.run()
+        roi.run_auto()
+        print('Detecting RegionOfInterest...')
+        self.detect(IMG_ROI)
 
         self.calculateBoundingBox()
 
