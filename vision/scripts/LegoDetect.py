@@ -17,6 +17,10 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 VISION_PATH = os.path.abspath(os.path.join(ROOT, ".."))
 IMG_ROI = os.path.abspath(os.path.join(ROOT, "log/img_ROI.png"))
 
+WEIGHTS_PATH = os.path.join(VISION_PATH, "weights/gen5_L_best2.pt")
+CONFIDENCE = 0.6
+MODEL = torch.hub.load('ultralytics/yolov5', 'custom', WEIGHTS_PATH)
+
 LEGO_NAMES = [  'X1-Y1-Z2',
                 'X1-Y2-Z1',
                 'X1-Y2-Z2',
@@ -35,15 +39,12 @@ class LegoDetect:
 
     def __init__(self, img_path):
        
-        self.weights_path = os.path.join(VISION_PATH, "weights/best.pt")
-        self.model = torch.hub.load('ultralytics/yolov5', 'custom', self.weights_path)
-        self.model.conf = 0.7
-        self.model.multi_label = True
-        self.model.iou = 0.5
-        self.img_path = img_path
+        MODEL.conf = CONFIDENCE
+        MODEL.multi_label = False
+        # MODEL.iou = 0.5
+    
         self.lego_list = []
-        
-        # self.detect(self.img_path)
+        self.detect(img_path)
 
         # choice = '0'
         # while True:
@@ -59,7 +60,7 @@ class LegoDetect:
 
         #     if choice == '1':
         #         print('Detecting again...')
-        #         self.detect(self.img_path)
+        #         self.detect(img_path)
         #         choice = '0'
 
         #     if choice == '2':
@@ -70,30 +71,24 @@ class LegoDetect:
         #         self.detect(IMG_ROI)
         #         choice = '0'
 
-        print('Draw RegionOfInterest')
-        roi = RegionOfInterest(img_path, IMG_ROI)
-        # roi.run()
-        roi.run_auto()
-        print('Detecting RegionOfInterest...')
-        self.detect(IMG_ROI)
-
-        self.calculateBoundingBox()
+        # print('Draw RegionOfInterest')
+        # roi = RegionOfInterest(img_path, IMG_ROI)
+        # # roi.run()
+        # roi.run_auto()
+        # print('Detecting RegionOfInterest...')
+        # self.detect(IMG_ROI)
 
     def detect(self, img_path):
         '''
         Detect lego
         '''
         self.lego_list.clear()
-        self.results = self.model(img_path)
+        self.results = MODEL(img_path)
         self.results.show()
         img = Image.open(img_path)
         print(img_path)
         print('img size:', img.width, 'x', img.height)
 
-    def calculateBoundingBox(self):
-        '''
-        Calculate bboxes in detail. Call after detect()
-        '''
         bboxes = self.results.pandas().xyxy[0].to_dict(orient="records")
         # For each detected obj, add to lego_list
         for bbox in bboxes:
@@ -103,7 +98,14 @@ class LegoDetect:
             y1 = int(bbox['ymin'])
             x2 = int(bbox['xmax'])
             y2 = int(bbox['ymax'])
-            self.lego_list.append(Lego(name, conf, x1, y1, x2, y2, self.img_path))
+            self.lego_list.append(Lego(name, conf, x1, y1, x2, y2, img_path))
+
+        print('Detected', len(self.lego_list), 'object(s)\n')
+
+    def show(self):
+        for index, lego in enumerate(self.lego_list, start=1):
+            print(index)
+            lego.show()
 
 # -----------------------------------------------------------------------------
 
@@ -135,7 +137,6 @@ class Lego:
         self.img = self.img.resize(new_size, Image.LANCZOS)
 
         # Obj details
-        print()
         display(self.img)
         print('class =', self.name)
         print('id =', self.class_id)
@@ -144,7 +145,7 @@ class Lego:
         print('center_point_uv =', self.center_point_uv)
         print('--> point cloud =', self.point_cloud)
         print('--> point world =', self.point_world)
-        print('\n-----------------')
+        print()
 
 # -----------------------------------------------------------------------------
 

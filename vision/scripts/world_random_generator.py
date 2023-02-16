@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on 3 May  2022
-
-@author: mfocchi
-"""
-
 from __future__ import print_function
 
 import os
