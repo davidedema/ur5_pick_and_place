@@ -55,6 +55,7 @@ void sendJointState(VectorXf q);
 void move();
 void startingPosition();
 void ack();
+void graspit();
 
 // ----------- MAIN ----------- //
 
@@ -290,7 +291,6 @@ void sendJointState(VectorXf q)
 {
     ros::Rate loop_rate(LOOP_RATE);
     std_msgs::Float64MultiArray jointState_msg_robot;
-    ros_impedance_controller::generic_float gripper_diameter;
     jointState_msg_robot.data.resize(JOINTS);
     for (int i = 0; i < 6; i++)
     {
@@ -463,6 +463,7 @@ void ack()
  */
 void graspit()
 {
+    ros_impedance_controller::generic_float gripper_diameter;
     if (grasp)
     {
         gripper_diameter.request.data = 50;
