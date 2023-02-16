@@ -28,16 +28,16 @@ def changeposition (myroot):
             continue
         print("old:"+position.text)
         # create nwe random position
-    new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
-    while (checkposition(new_position, listposition)):
         new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
+        while (checkposition(new_position, listposition)):
+            new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
 
-    position.text = new_position        
-    listposition.append(position.text)
+        position.text = new_position        
+        listposition.append(position.text)
+        counter = counter + 1
+        print(position.text)
     print("array:")
-    print(listposition)
-    counter = counter + 1
-    print(position.text)
+    print(listposition)  
 
 def checkposition(actpose, listposition):
     print ("check")
@@ -95,7 +95,7 @@ if __name__ == '__main__':
         '''
 
 
-    os.system("cd /home/giulio/ros_ws; catkin_make install; source devel/setup.bash")
+    os.system("cd ~/ros_ws; catkin_make install; source devel/setup.bash")
     #self.world_name = 'lego.world'
     #self.world_name = None # only the workbench
     #self.world_name = 'empty.world'
