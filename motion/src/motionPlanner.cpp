@@ -32,6 +32,7 @@ using namespace std;
 using namespace Eigen;
 
 // ----------- STRUCTS ----------- //
+
 /**
  * @brief This struct contains the position and orientation of the end-effector
  * 
