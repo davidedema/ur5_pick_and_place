@@ -45,7 +45,7 @@ class Vision:
         self.pos_pub = ros.Publisher("/vision/pos", pos, queue_size=1)
         self.ack_sub = ros.Subscriber('/vision/ack', Int32, self.ackCallbak)
         self.image_sub = ros.Subscriber("/ur5/zed_node/left_raw/image_raw_color", Image, self.receive_image)
-        self.sub_pointcloud = ros.Subscriber("/ur5/zed_node/point_cloud/cloud_registered", PointCloud2, self.receive_pointcloud, queue_size=1)
+        self.pointcloud_sub = ros.Subscriber("/ur5/zed_node/point_cloud/cloud_registered", PointCloud2, self.receive_pointcloud, queue_size=1)
         self.ack_pub = ros.Publisher('/taskManager/stop', Int32, queue_size=1)
         
     def receive_image(self, data):

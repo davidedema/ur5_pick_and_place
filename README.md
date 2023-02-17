@@ -20,6 +20,7 @@
 - [How to run the project](#how-to-run-the-project)
   - [Setup](#setup)
   - [Running](#running)
+- [Known Issues](#known-issues)
 
 
 ## Project Description
@@ -105,4 +106,12 @@ rosrun motion motionPlanner
 ```BASH
 cd ~/ros_ws/src/robotics_project/vision/scripts
 python3 vision.py
+```
+
+## Known Issues
+If your pc has a old graphic card that has not a lot of VRAM errors can be generated when running the vision node, to solve this you have to add these line
+in the `LegoDetect.py` file (add it after the imports):
+```PYTHON
+torch.cuda.empty_cache()
+torch.backends.cudnn.enabled = False
 ```
