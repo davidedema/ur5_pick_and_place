@@ -17,7 +17,7 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-USING_REAL_CAM = True
+USING_REAL_CAM = False
 
 # ---------------------- CLASS ----------------------
 

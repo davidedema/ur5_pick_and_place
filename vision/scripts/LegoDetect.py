@@ -26,7 +26,7 @@ VISION_PATH = os.path.abspath(os.path.join(ROOT, ".."))
 IMG_ROI = os.path.abspath(os.path.join(ROOT, "log/img_ROI.png"))
 
 WEIGHTS_PATH = os.path.join(VISION_PATH, "weights/best.pt")
-CONFIDENCE = 0.6
+CONFIDENCE = 0.75
 MODEL = torch.hub.load('ultralytics/yolov5', 'custom', WEIGHTS_PATH)
 
 LEGO_NAMES = [  'X1-Y1-Z2',
@@ -55,7 +55,7 @@ class LegoDetect:
 
         MODEL.conf = CONFIDENCE
         MODEL.multi_label = False
-        MODEL.iou = 0.5
+        # MODEL.iou = 0.5
     
         self.lego_list = []
         self.detect(img_path)
@@ -82,11 +82,7 @@ class LegoDetect:
 
             # Detect using ROI
             if choice == '2':
-                print('Draw RegionOfInterest')
-                roi = RegionOfInterest(img_path, IMG_ROI)
-                roi.run_auto()
-                print('Detecting RegionOfInterest...')
-                self.detect(IMG_ROI)
+                self.detect_ROI(img_path)
                 choice = '0'
 
     def detect_ROI(self, img_path):

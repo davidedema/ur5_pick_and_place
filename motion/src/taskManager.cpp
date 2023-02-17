@@ -43,7 +43,7 @@ ros::Subscriber sub_stop;
 /// @brief Flag to indicate that the vision msg is received
 int vision_received = 0;
 /// @brief Flag to indicate that the vision is on
-int vision_on = 0;
+int vision_on = 1;
 /// @brief Position of the block
 Vector3f block_pos;
 /// @brief Rotation of the block
