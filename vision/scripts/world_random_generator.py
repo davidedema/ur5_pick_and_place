@@ -33,15 +33,16 @@ def changeposition (myroot):
             counter = counter + 1
             continue
         print("old:"+position.text)
-        # create new random position
+        # create new random position and check if it is already used
         new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
         while (checkposition(new_position, listposition)):
             new_position = str(round(random.uniform(0, 0.5), 2)) + ' ' + str(round(random.uniform(0.2, 0.8), 2)) + ' ' + '0.9' + ' 0 0 0'
-
+        #update the position
         position.text = new_position        
         listposition.append(position.text)
         counter = counter + 1
         print(position.text)
+    #print the list of the positions
     print("array:")
     print(listposition)  
 
@@ -59,7 +60,7 @@ def changeblock (myroot):
         print(block_name.text)
 
 
-
+#check if the position is already used by another block
 def checkposition(actpose, listposition):
     print ("check")
     for pose in listposition:
@@ -78,35 +79,38 @@ if __name__ == '__main__':
     if number == 1:
         mytree = ET.parse(WORLD_DIR+'legopiece1.world')
         myroot = mytree.getroot()
+        #change the position of the blocks
         changeposition(myroot)
         choice = int(input("Change bocks? 1 for yes, 0 for no: "))
         if choice == 1:
             changeblock(myroot)
         #apply the changes
         mytree.write(WORLD_DIR+'legopiece1.world')
-        #self.world_name = 'legopiece1.world'
     elif number == 2:
         mytree = ET.parse(WORLD_DIR+'legopiece2.world')
         myroot = mytree.getroot()
+        #change the position of the blocks
         changeposition(myroot)
         choice = int(input("Change bocks? 1 for yes, 0 for no: "))
         if choice == 1:
             changeblock(myroot)
         #apply the changes
         mytree.write(WORLD_DIR+'legopiece2.world')
-        #self.world_name = 'legopiece2.world'
-        
+    
     elif number == 3:
         mytree = ET.parse(WORLD_DIR+'legopiece3.world')
         myroot = mytree.getroot()
+        #change the position of the blocks
         changeposition(myroot)
         choice = int(input("Change bocks? 1 for yes, 0 for no: "))
         if choice == 1:
+            #change the blocks' class randomly 
             changeblock(myroot)
         #apply the changes
         mytree.write(WORLD_DIR+'legopiece3.world')
-        #self.world_name = 'legopiece3.world'
+
         '''
+    useless other cases for now
     elif number == 4:
 
     elif number == 5:
@@ -123,15 +127,5 @@ if __name__ == '__main__':
 
     elif number == 11: 
         '''
-
-
-    #os.system("cd ~/ros_ws; catkin_make install; source devel/setup.bash")
-    #self.world_name = 'lego.world'
-    #self.world_name = None # only the workbench
-    #self.world_name = 'empty.world'
-    #self.world_name = 'palopoli.world'
-
-    print("Initialized ur5 generic  controller---------------------------------------------------------------")
-
     
         
