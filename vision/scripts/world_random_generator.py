@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+"""!
+@file world_random_generator.py
+@author Giulio Zamberlan (giulio.zamberlan@studenti.unitn.it
+@brief Defines function to generate random pose in world file.
+@date 2023-02-17
+"""
 from __future__ import print_function
 
 import os
@@ -21,9 +26,10 @@ LEGO_NAMES = [  'X1-Y1-Z2',
                 'X2-Y2-Z2',
                 'X2-Y2-Z2-FILLET']
 
-#world random generator
-
 def changeposition (myroot):
+    """
+    @brief world random generator
+    """
     counter = 0  # counter for the number of iterations
     listposition = []; # list of the position of the objects
     # iterating through the price values.
@@ -47,6 +53,9 @@ def changeposition (myroot):
     print(listposition)  
 
 def changeblock (myroot):
+    """
+    @brief change block
+    """
     counter = 0  # counter for the number of iterations
     listposition = []; # list of the position of the objects
     # iterating through the price values.
@@ -59,9 +68,10 @@ def changeblock (myroot):
         block_name.text = 'model://' + new_block
         print(block_name.text)
 
-
-#check if the position is already used by another block
 def checkposition(actpose, listposition):
+    """
+    @brief check if the position is already used by another block
+    """
     print ("check")
     for pose in listposition:
         if (actpose==pose):
@@ -69,6 +79,10 @@ def checkposition(actpose, listposition):
         else:
             return False
 
+# ---------------------- MAIN ----------------------
+# To use in command:
+# python3 world_random_generator.py
+ 
 if __name__ == '__main__':
 
     #get user input
@@ -109,23 +123,5 @@ if __name__ == '__main__':
         #apply the changes
         mytree.write(WORLD_DIR+'legopiece3.world')
 
-        '''
-    useless other cases for now
-    elif number == 4:
-
-    elif number == 5:
-
-    elif number == 6:
-
-    elif number == 7:
-
-    elif number == 8:
-
-    elif number == 9:
-
-    elif number == 10:
-
-    elif number == 11: 
-        '''
     
         

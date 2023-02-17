@@ -147,7 +147,7 @@ class Vision:
 # ---------------------- MAIN ----------------------
 # To use in command:
 # python3 Vision.py
-#      
+ 
 if __name__ == '__main__':
 
     vision = Vision()

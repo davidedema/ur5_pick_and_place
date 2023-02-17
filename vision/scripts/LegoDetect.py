@@ -4,7 +4,7 @@
 @brief Defines the class Lego and LegoDetect.
 @date 2023-02-17
 """
-# ----------- IMPORT -----------
+# ---------------------- IMPORT ----------------------
 from pathlib import Path
 import sys
 import os
