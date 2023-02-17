@@ -1,3 +1,10 @@
+"""!
+@file LegoDetect.py
+@author Anh Tu Duong (anhtu.duong@studenti.unitn.it)
+@brief Defines the class Lego and LegoDetect.
+@date 2023-02-17
+"""
+# ----------- IMPORT -----------
 from pathlib import Path
 import sys
 import os
@@ -9,6 +16,7 @@ from IPython.display import display
 from PIL import Image
 from RegionOfInterest import RegionOfInterest
 
+# ----------- GLOBAL CONSTANTS -----------
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
@@ -17,7 +25,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 VISION_PATH = os.path.abspath(os.path.join(ROOT, ".."))
 IMG_ROI = os.path.abspath(os.path.join(ROOT, "log/img_ROI.png"))
 
-WEIGHTS_PATH = os.path.join(VISION_PATH, "weights/gen5_L_best2.pt")
+WEIGHTS_PATH = os.path.join(VISION_PATH, "weights/best.pt")
 CONFIDENCE = 0.6
 MODEL = torch.hub.load('ultralytics/yolov5', 'custom', WEIGHTS_PATH)
 
@@ -33,10 +41,12 @@ LEGO_NAMES = [  'X1-Y1-Z2',
                 'X2-Y2-Z2',
                 'X2-Y2-Z2-FILLET']
 
-# -----------------------------------------------------------------------------
+# ----------- CLASSES -----------
 
 class LegoDetect:
-
+    """
+    @brief This class use custom trained weights and detect lego blocks with YOLOv5
+    """
     def __init__(self, img_path):
        
         MODEL.conf = CONFIDENCE
@@ -46,37 +56,41 @@ class LegoDetect:
         self.lego_list = []
         self.detect(img_path)
 
-        # choice = '0'
-        # while True:
-        #     while (choice != '1' and choice != '2' and choice != ''):
-        #         ask =  ('\nContinue     (ENTER)'+
-        #                 '\nDetect again (1)'+
-        #                 '\nDetect ROI   (2)'+
-        #                 '\nchoice ----> ')
-        #         choice = input(ask)
+        choice = '0'
+        while True:
+            while (choice != '1' and choice != '2' and choice != ''):
+                ask =  ('\nContinue     (ENTER)'+
+                        '\nDetect again (1)'+
+                        '\nDetect ROI   (2)'+
+                        '\nchoice ----> ')
+                choice = input(ask)
 
-        #     if choice == '':
-        #         break
+            if choice == '':
+                break
 
-        #     if choice == '1':
-        #         print('Detecting again...')
-        #         self.detect(img_path)
-        #         choice = '0'
+            if choice == '1':
+                print('Detecting again...')
+                self.detect(img_path)
+                choice = '0'
 
-        #     if choice == '2':
-        #         print('Draw RegionOfInterest')
-        #         roi = RegionOfInterest(img_path, IMG_ROI)
-        #         roi.run()
-        #         print('Detecting RegionOfInterest...')
-        #         self.detect(IMG_ROI)
-        #         choice = '0'
+            if choice == '2':
+                print('Draw RegionOfInterest')
+                roi = RegionOfInterest(img_path, IMG_ROI)
+                roi.run_auto()
+                print('Detecting RegionOfInterest...')
+                self.detect(IMG_ROI)
+                choice = '0'
+        
+        
 
-        # print('Draw RegionOfInterest')
-        # roi = RegionOfInterest(img_path, IMG_ROI)
-        # # roi.run()
-        # roi.run_auto()
-        # print('Detecting RegionOfInterest...')
-        # self.detect(IMG_ROI)
+    def detect_ROI(self, img_path):
+
+        print('Draw RegionOfInterest')
+        roi = RegionOfInterest(img_path, IMG_ROI)
+        # roi.run()
+        roi.run_auto()
+        print('Detecting RegionOfInterest...')
+        self.detect(IMG_ROI)
 
     def detect(self, img_path):
         '''
@@ -101,6 +115,7 @@ class LegoDetect:
             self.lego_list.append(Lego(name, conf, x1, y1, x2, y2, img_path))
 
         print('Detected', len(self.lego_list), 'object(s)\n')
+        self.show()
 
     def show(self):
         for index, lego in enumerate(self.lego_list, start=1):
@@ -154,5 +169,4 @@ class Lego:
 
 if __name__ == '__main__':
     legoDetect = LegoDetect(img_origin_path=sys.argv[1])
-    for lego in legoDetect.lego_list:
-        lego.show()
+

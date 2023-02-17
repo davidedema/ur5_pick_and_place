@@ -9,7 +9,7 @@ ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-
+USING_REAL_CAM = True
 
 class RegionOfInterest:
     def __init__(self, image_path, output_path):
@@ -66,10 +66,12 @@ class RegionOfInterest:
     def run_auto(self):
         
         mask = np.zeros(self.img.shape[0:2], dtype=np.uint8)
-        # SIM CAM
-        points = np.array([[[845,409], [1201,412], [1545,913], [658, 921]]])
-        # REAL CAM
-        # points = np.array([[[457,557], [555,272], [779,267], [960,532]]])
+
+        if USING_REAL_CAM:
+            points = np.array([[[457,557], [555,272], [779,267], [960,532]]])
+        else:
+            points = np.array([[[845,409], [1201,412], [1545,913], [658, 921]]])
+
         #method 1 smooth region
         cv2.drawContours(mask, [points], -1, (255, 255, 255), -1, cv2.LINE_AA)
         #method 2 not so smooth region
@@ -85,7 +87,7 @@ class RegionOfInterest:
         # cv2.imshow('Original',self.img)
         # cv2.imshow("Mask",mask)
         # cv2.imshow("Cropped", cropped )
-        cv2.imshow("Samed Size Black Image", res)
+        # cv2.imshow("Samed Size Black Image", res)
         cv2.imwrite(self.output_path, res)
         # cv2.imshow("Samed Size White Image", dst)
         # cv2.waitKey(0)
