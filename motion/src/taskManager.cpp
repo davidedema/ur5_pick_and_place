@@ -22,6 +22,8 @@
 
 /// @brief Loop rate of the node
 #define LOOP_RATE 1000
+/// @brief Flag to indicate if the robot is real or simulated
+#define REAL_ROBOT 0
 
 // ------------------- NAMESPACES ------------------- //
 
@@ -58,6 +60,7 @@ int stop = 0;
 // ------------------- FUNCTIONS PROTOTIPES ------------------- //
 
 Vector3f worldToBase(Vector3f xw);
+Vector3f cameraToWorld(Vector3f xw);
 void visionCallback(const motion::pos::ConstPtr &msg);
 void ackCallback(const std_msgs::Int32::ConstPtr &msg);
 void stopCallback(const std_msgs::Int32::ConstPtr &msg);
@@ -106,6 +109,9 @@ int main(int argc, char **argv)
                 cout << "Block position: " << block_pos.transpose() << endl;
                 cout << "Block rotation: " << block_rot.transpose() << endl;
                 cout << "Block class: " << block_class << endl;
+                if (REAL_ROBOT)
+                    block_pos = cameraToWorld(block_pos);
+                else
                 block_pos = worldToBase(block_pos);
                 msg.x = block_pos(0);
                 msg.y = block_pos(1);
@@ -140,6 +146,26 @@ Vector3f worldToBase(Vector3f xw)
         0, 0, -1, 1.75,
         0, 0, 0, 1;
     xt = T.inverse() * Vector4f(xw(0), xw(1), xw(2), 1);
+    xb << xt(0), xt(1), xt(2);
+    return xb;
+}
+
+/**
+ * @brief Convert the position of the block from the camera frame (real robot) to the world frame
+ * 
+ * @param xw 3D vector representing the position of the block in the camera frame
+ * @return Vector3f 
+ */
+Vector3f cameraToWorld(Vector3f xw)
+{
+    Matrix4f T;
+    Vector3f xb;
+    Vector4f xt;
+    T << 0.866, 0, 0.5, -0.4,
+              0, 1, 0, 0.53,
+              -0.5, 0, 0.866, 1.4,
+              0, 0, 0, 1;
+    xt = T * Vector4f(xw(0), xw(1), xw(2), 1);
     xb << xt(0), xt(1), xt(2);
     return xb;
 }
