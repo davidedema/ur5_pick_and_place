@@ -1,4 +1,11 @@
-#!/usr/bin/env python
+"""!
+@file Vision.py
+@author Anh Tu Duong (anhtu.duong@studenti.unitn.it), Giulio Zamberlan (giulio.zamberlan@studenti.unitn.it)
+@brief Defines the Vision node that communicates with Motion node.
+@date 2023-02-17
+"""
+
+# ---------------------- IMPORT ----------------------
 from pathlib import Path
 import sys
 import os
@@ -13,6 +20,7 @@ from std_msgs.msg import Int32
 from motion.msg import pos
 from LegoDetect import LegoDetect
 
+# ---------------------- GLOBAL CONSTANTS ----------------------
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
@@ -26,11 +34,16 @@ base_offset = np.array([0.5, 0.35, 1.75])
 
 OFF_SET = 0.86 + 0.1
 
-# -----------------------------------------------------------------------------------------
+# ---------------------- CLASS ----------------------
 
 class Vision:
+    """
+    @brief This class recognizes lego blocks from ZED camera and communicates with different ROS node
+    """
 
     def __init__(self):
+        """ @brief Class constructor
+        """
 
         ros.init_node('vision', anonymous=True)
 
@@ -42,6 +55,7 @@ class Vision:
         self.allow_receive_pointcloud = False
         self.vision_ready = 0
 
+        # Subscribe and publish to ros nodes
         self.image_sub = ros.Subscriber("/ur5/zed_node/left_raw/image_raw_color", Image, self.receive_image)
         self.pointcloud_sub = ros.Subscriber("/ur5/zed_node/point_cloud/cloud_registered", PointCloud2, self.receive_pointcloud, queue_size=1)
         self.pos_pub = ros.Publisher("/vision/pos", pos, queue_size=1)
@@ -49,17 +63,22 @@ class Vision:
         self.ack_pub = ros.Publisher('/taskManager/stop', Int32, queue_size=1)
         
     def receive_image(self, data):
+        """ @brief Callback function whenever take msg from ZED camera
+            @param data (msg): msg taken from ZED node
+        """
 
         # Flag
         if not self.allow_receive_image:
             return
         self.allow_receive_image = False
 
+        # Convert ROS image to OpenCV image
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
             print(e)
 
+        # Save image and detect lego
         cv.imwrite(IMG_ZED, cv_image)
         legoDetect = LegoDetect(IMG_ZED)
         self.lego_list = legoDetect.lego_list
@@ -67,6 +86,9 @@ class Vision:
         self.allow_receive_pointcloud = True
 
     def receive_pointcloud(self, msg):
+        """ @brief Callback function whenever take point_cloud msg from ZED camera
+            @param msg (msg): msg taken from ZED node
+        """
 
         # Flag
         if not self.allow_receive_pointcloud:
@@ -105,11 +127,16 @@ class Vision:
         self.send_pos_msg()
 
     def ackCallbak(self, ack_ready):
-        
+        """ @brief check if the motion planner is ready to receive the position of the lego
+            @param ack_ready (msg): msg from Motion node
+        """
+
         if self.vision_ready == 1 and ack_ready.data == 1:
             self.send_pos_msg()
             
     def send_pos_msg(self):
+        """ @brief send the position of the lego to motion planner
+        """
         try:
             pos_msg = self.pos_msg_list.pop()
             self.pos_pub.publish(pos_msg)
@@ -117,10 +144,10 @@ class Vision:
         except IndexError:
             print('\nFINISH ALL LEGO\n')
             
-            
-
-# -----------------------------------------------------------------------------------------
-        
+# ---------------------- MAIN ----------------------
+# To use in command:
+# python3 Vision.py
+#      
 if __name__ == '__main__':
 
     vision = Vision()
