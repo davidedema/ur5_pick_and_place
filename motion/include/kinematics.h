@@ -1,3 +1,13 @@
+/**
+ * @file kinematics.h
+ * @author Davide De Martini (davide.demartini@studenti.unitn.it)
+ * @brief This file contains the kinematics functions
+ * @version 0.1
+ * @date 2023-02-17
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #ifndef KINEMATICS_H
 #define KINEMATICS_H
 
@@ -9,6 +19,10 @@
 using namespace std;
 using namespace Eigen;
 
+/**
+ * @brief Structure to store the position and rotation of the end effector
+ *
+ */
 struct frame
 {
     Matrix3f rot;
