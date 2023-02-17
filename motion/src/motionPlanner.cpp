@@ -483,12 +483,12 @@ void graspit()
     ros_impedance_controller::generic_float gripper_diameter;
     if (grasp)
     {
-        gripper_diameter.request.data = 50;
+        gripper_diameter.request.data = 60;
         client.call(gripper_diameter);
     }
     else
     {
-        gripper_diameter.request.data = 110;
+        gripper_diameter.request.data = 100;
         client.call(gripper_diameter);
     }
 }
