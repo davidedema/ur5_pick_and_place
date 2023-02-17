@@ -16,7 +16,7 @@ from IPython.display import display
 from PIL import Image
 from RegionOfInterest import RegionOfInterest
 
-# ----------- GLOBAL CONSTANTS -----------
+# ---------------------- GLOBAL CONSTANTS ----------------------
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]
 if str(ROOT) not in sys.path:
@@ -41,21 +41,26 @@ LEGO_NAMES = [  'X1-Y1-Z2',
                 'X2-Y2-Z2',
                 'X2-Y2-Z2-FILLET']
 
-# ----------- CLASSES -----------
+# ---------------------- CLASS ----------------------
 
 class LegoDetect:
     """
     @brief This class use custom trained weights and detect lego blocks with YOLOv5
     """
+
     def __init__(self, img_path):
-       
+        """ @brief Class constructor
+            @param img_path (String): path of input image
+        """
+
         MODEL.conf = CONFIDENCE
         MODEL.multi_label = False
-        # MODEL.iou = 0.5
+        MODEL.iou = 0.5
     
         self.lego_list = []
         self.detect(img_path)
 
+        # Let user choose detect method
         choice = '0'
         while True:
             while (choice != '1' and choice != '2' and choice != ''):
@@ -65,14 +70,17 @@ class LegoDetect:
                         '\nchoice ----> ')
                 choice = input(ask)
 
+            # Continue
             if choice == '':
                 break
 
+            # Detect again using original image
             if choice == '1':
                 print('Detecting again...')
                 self.detect(img_path)
                 choice = '0'
 
+            # Detect using ROI
             if choice == '2':
                 print('Draw RegionOfInterest')
                 roi = RegionOfInterest(img_path, IMG_ROI)
@@ -80,31 +88,33 @@ class LegoDetect:
                 print('Detecting RegionOfInterest...')
                 self.detect(IMG_ROI)
                 choice = '0'
-        
-        
 
     def detect_ROI(self, img_path):
+        """ @brief Detect using Region Of Interest
+            @param img_path (String): path of input image
+        """
 
         print('Draw RegionOfInterest')
         roi = RegionOfInterest(img_path, IMG_ROI)
-        # roi.run()
         roi.run_auto()
         print('Detecting RegionOfInterest...')
         self.detect(IMG_ROI)
 
     def detect(self, img_path):
-        '''
-        Detect lego
-        '''
+        """ @brief This function pass the image path to the model and calculate bounding boxes for each object
+            @param img_path (String): path of input image
+        """
         self.lego_list.clear()
+
+        # Detection model
         self.results = MODEL(img_path)
         self.results.show()
         img = Image.open(img_path)
         print(img_path)
         print('img size:', img.width, 'x', img.height)
 
+        # Bounding boxes
         bboxes = self.results.pandas().xyxy[0].to_dict(orient="records")
-        # For each detected obj, add to lego_list
         for bbox in bboxes:
             name = bbox['name']
             conf = bbox['confidence']
@@ -112,21 +122,38 @@ class LegoDetect:
             y1 = int(bbox['ymin'])
             x2 = int(bbox['xmax'])
             y2 = int(bbox['ymax'])
+            # Add lego to list
             self.lego_list.append(Lego(name, conf, x1, y1, x2, y2, img_path))
 
+        # Info
         print('Detected', len(self.lego_list), 'object(s)\n')
         self.show()
 
     def show(self):
+        """ @brief This function show infos of detected legos
+        """
         for index, lego in enumerate(self.lego_list, start=1):
             print(index)
             lego.show()
 
-# -----------------------------------------------------------------------------
+# ---------------------- CLASS ----------------------
 
 class Lego:
+    """
+    @brief This class represents info of detected lego
+    """
 
     def __init__(self, name, conf, x1, y1, x2, y2, img_source_path):
+        """ @brief Class constructor
+            @param name (String): lego name
+            @param conf (float): confidence
+            @param x1 (float): xmin of bounding box
+            @param y1 (float): ymin of bounding box
+            @param x2 (float): xmax of bounding box
+            @param y2 (float): ymax of bounding box
+            @param img_source_path (String): path to image
+        """
+
         self.name = name
         self.class_id = LEGO_NAMES.index(name)
         self.confidence = conf
@@ -142,6 +169,9 @@ class Lego:
         self.point_world = ()
 
     def show(self):
+        """ @brief Show lego info
+        """
+
         self.img = self.img_source.crop((self.xmin, self.ymin, self.xmax, self.ymax))
 
         # Resize detected obj
@@ -151,7 +181,7 @@ class Lego:
         new_size = (new_width, int(new_width * aspect_ratio))
         self.img = self.img.resize(new_size, Image.LANCZOS)
 
-        # Obj details
+        # Lego details
         display(self.img)
         print('class =', self.name)
         print('id =', self.class_id)
@@ -162,8 +192,7 @@ class Lego:
         print('--> point world =', self.point_world)
         print()
 
-# -----------------------------------------------------------------------------
-
+# ---------------------- MAIN ----------------------
 # To use in command:
 # python3 LegoDetect.py /path/to/img...
 
