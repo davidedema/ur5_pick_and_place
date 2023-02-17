@@ -1,4 +1,13 @@
-// Author: De Martini Davide
+/**
+ * @file taskManager.cpp
+ * @author De Martini Davide (davide.demartini@studenti.unitn.it)
+ * @brief This file contains the task manager node
+ * @version 1
+ * @date 2023-02-17
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 
 #include "ros/ros.h"
 #include "kinematics.h"
@@ -11,6 +20,7 @@
 
 // ------------------- DEFINES ------------------- //
 
+/// @brief Loop rate of the node
 #define LOOP_RATE 1000
 
 // ------------------- NAMESPACES ------------------- //
@@ -20,17 +30,29 @@ using namespace Eigen;
 
 // ------------------- GLOBAL VARIABLES ------------------- //
 
+/// @brief Publisher for the position of the block
 ros::Publisher pub_pos;
+/// @brief Publisher for the ack
 ros::Publisher pub_ack;
+/// @brief Subscriber for the vision topic
 ros::Subscriber sub_vision;
+/// @brief Subscriber for the ack topic
 ros::Subscriber sub_ack;
+/// @brief Subscriber for the stop topic
 ros::Subscriber sub_stop;
+/// @brief Flag to indicate that the vision msg is received
 int vision_received = 0;
+/// @brief Flag to indicate that the vision is on
 int vision_on = 0;
+/// @brief Position of the block
 Vector3f block_pos;
+/// @brief Rotation of the block
 Vector3f block_rot;
+/// @brief Class of the block
 int block_class;
+/// @brief Flag to indicate that the motion is finished
 int ready = 1;
+/// @brief Flag to indicate that the task manager has to stop
 int stop = 0;
 
 // ------------------- FUNCTIONS PROTOTIPES ------------------- //

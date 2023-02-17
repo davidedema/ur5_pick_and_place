@@ -18,7 +18,7 @@ struct frame
 /**
  * @brief create the transformation matrix for the first joint
  *
- * @param th1
+ * @param th1 Angle of the first joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t10f(float th1)
@@ -41,7 +41,7 @@ Matrix4f t10f(float th1)
 /**
  * @brief create the transformation matrix for the second joint
  *
- * @param th2
+ * @param th2 Angle of the second joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t21f(float th2)
@@ -64,7 +64,7 @@ Matrix4f t21f(float th2)
 /**
  * @brief create the transformation matrix for the third joint
  *
- * @param th3
+ * @param th3 Angle of the third joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t32f(float th3)
@@ -87,7 +87,7 @@ Matrix4f t32f(float th3)
 /**
  * @brief create the transformation matrix for the fourth joint
  *
- * @param th4
+ * @param th4 Angle of the fourth joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t43f(float th4)
@@ -110,7 +110,7 @@ Matrix4f t43f(float th4)
 /**
  * @brief create the transformation matrix for the fifth joint
  *
- * @param th5
+ * @param th5 Angle of the fifth joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t54f(float th5)
@@ -133,7 +133,7 @@ Matrix4f t54f(float th5)
 /**
  * @brief create the transformation matrix for the sixth joint
  *
- * @param th6
+ * @param th6 Angle of the sixth joint
  * @return Eigen::Matrix4f
  */
 Matrix4f t65f(float th6)
@@ -172,10 +172,9 @@ frame directKin(VectorXf th)
 
 /**
  * @brief compute the inverse kinematics
- *
- * @param rot desired orientation of the end effector
- * @param xyz desired position of the end effector
- * @return ikin : joint angles
+ * 
+ * @param frame current frame of the end effector
+ * @return MatrixXf 
  */
 MatrixXf invKin(frame &frame)
 {

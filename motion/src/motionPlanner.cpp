@@ -1,4 +1,13 @@
-// Author: De Martini Davide
+/**
+ * @file motionPlanner.cpp
+ * @author De Martini Davide (davide.demartini@studenti.unitn.it)
+ * @brief  This file contains the motion planner node
+ * @version 1
+ * @date 2023-02-17
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 
 #include "ros/ros.h"
 #include "kinematics.h"
@@ -12,8 +21,9 @@
 #include <complex>
 
 // ----------- DEFINES ----------- //
-
+/// Loop rate of the node
 #define LOOP_RATE 1000
+/// Number of joints
 #define JOINTS 9
 
 // ----------- NAMESPACES ----------- //
@@ -33,16 +43,25 @@ struct Pose
 };
 
 // ----------- GLOBAL VARIABLES ----------- //
-
+/// Position of the end-effector
 Pose pose;
+/// Class of the block
 int class_id;
+/// Flag to check if it have to grasp
 int grasp = 0;
+/// Publisher for the desired joint state
 ros::Publisher pub_des_jstate;
+/// Publisher for the ack
 ros::Publisher ack_pos;
+/// Subscriber for the position msg
 ros::Subscriber sub_pos;
+/// Service call for the gripper
 ros::ServiceClient client;
+/// Flag to check if it is in simulation
 int real_robot = 0;
+/// @brief Initial joint configuration
 VectorXf TH0(6);
+/// @brief Flag to check if it is the first time that the node is called
 int first = 1;
 
 
