@@ -39,30 +39,74 @@ class RegionOfInterest:
     def run_auto(self):
         """ @brief Draw custom mask and set the outside of the mask black
         """
-        mask = np.zeros(self.img.shape[0:2], dtype=np.uint8)
+        self.draw_img = self.img.copy()
+        self.boxes = []
+        self.drawing = False
+        self.start = (-1, -1)
+        self.end = (-1, -1)
 
+        # cv2.namedWindow('image')
+        # cv2.setMouseCallback('image', self.draw_box)
+
+    def draw_box(self, event, x, y, flags, params):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            self.drawing = True
+            self.start = (x, y)
+            self.end = (x, y)
+            print('x =', self.start[0], 'y =', self.start[1])
+        elif event == cv2.EVENT_MOUSEMOVE:
+            if self.drawing == True:
+                self.end = (x, y)
+        elif event == cv2.EVENT_LBUTTONUP:
+            self.drawing = False
+            self.end = (x, y)
+            self.boxes.append((self.start, self.end))
+            self.start = (-1, -1)
+            self.end = (-1, -1)
+
+    def run(self):
+        while True:
+            temp_img = self.draw_img.copy()
+            for box in self.boxes:
+                cv2.rectangle(temp_img, box[0], box[1], (0, 255, 0), 2)
+            cv2.imshow('image', temp_img)
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('q'):
+                break
+            elif key == 13: # Check for "ENTER" button press
+                mask = np.zeros(self.img.shape[:2], dtype=np.uint8)
+                for box in self.boxes:
+                    cv2.rectangle(mask, box[0], box[1], 255, -1)
+                self.img[mask == 0] = (0, 0, 0)
+                cv2.imwrite(self.output_path, self.img)
+                self.draw_img[mask == 0] = (0, 0, 0)
+                cv2.imshow('image', self.draw_img)
+                cv2.waitKey(0)
+                break
+
+        cv2.destroyAllWindows()
+    
+    #automatically crop the region of interest depending on real camera or simulation camera
+
+    def run_auto(self):
+        
+        #create a mask of the same size of the image
+        mask = np.zeros(self.img.shape[0:2], dtype=np.uint8)
+        # check if the image is from real camera or simulation camera
         if USING_REAL_CAM:
             points = np.array([[[457,557], [555,272], [779,267], [960,532]]])
         else:
             points = np.array([[[845,409], [1201,412], [1545,913], [658, 921]]])
 
-        #method 1 smooth region
+        # define the region of interest without aliasing
         cv2.drawContours(mask, [points], -1, (255, 255, 255), -1, cv2.LINE_AA)
-        #method 2 not so smooth region
-        # cv2.fillPoly(mask, points, (255))
+    
+        # apply the mask to the image
         res = cv2.bitwise_and(self.img,self.img,mask = mask)
-        rect = cv2.boundingRect(points) # returns (x,y,w,h) of the rect
-        cropped = res[rect[1]: rect[1] + rect[3], rect[0]: rect[0] + rect[2]]
-        ## crate the white background of the same size of original image
-        wbg = np.ones_like(self.img, np.uint8)*255
-        cv2.bitwise_not(wbg,wbg, mask=mask)
-        # overlap the resulted cropped image on the white background
-        dst = wbg+res
-        # cv2.imshow('Original',self.img)
-        # cv2.imshow("Mask",mask)
-        # cv2.imshow("Cropped", cropped )
-        # cv2.imshow("Samed Size Black Image", res)
+
+        # save the image on the output path
         cv2.imwrite(self.output_path, res)
+
         # cv2.imshow("Samed Size White Image", dst)
         # cv2.waitKey(0)
         cv2.destroyAllWindows()
