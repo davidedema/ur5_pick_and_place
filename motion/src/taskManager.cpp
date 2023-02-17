@@ -125,7 +125,7 @@ Vector3f worldToBase(Vector3f xw)
 /**
  * @brief Callback function for the vision topic, sets the detected position of the block
  * 
- * @param msg 
+ * @param msg message received
  */
 void visionCallback(const motion::pos::ConstPtr &msg)
 {
@@ -138,7 +138,7 @@ void visionCallback(const motion::pos::ConstPtr &msg)
 /**
  * @brief Callback function for the ack topic, sets the ready variable -> finished the motion
  * 
- * @param msg 
+ * @param msg message received
  */
 void ackCallback(const std_msgs::Int32::ConstPtr &msg)
 {

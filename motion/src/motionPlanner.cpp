@@ -22,7 +22,10 @@ using namespace std;
 using namespace Eigen;
 
 // ----------- STRUCTS ----------- //
-
+/**
+ * @brief This struct contains the position and orientation of the end-effector
+ * 
+ */
 struct Pose
 {
     Vector3f position;
@@ -88,7 +91,7 @@ int main(int argc, char **argv)
 /**
  * @brief This function computes the angles of the gripper joint based on the diameter given
  *
- * @param diameter
+ * @param diameter diameter of the gripper
  * @return Vector3f
  */
 float mapToGripperJoints(float diameter)
@@ -100,8 +103,8 @@ float mapToGripperJoints(float diameter)
 /**
  * @brief This function computes the error between the current and desired end-effector position
  *
- * @param w_R_d
- * @param w_R_e
+ * @param w_R_d rotation matrix of the desired end-effector orientation
+ * @param w_R_e rotation matrix of the current end-effector orientation
  * @return Vector3f
  */
 Vector3f computeOrientationErrorW(Matrix3f w_R_e, Matrix3f w_R_d)
@@ -142,11 +145,8 @@ Vector3f computeOrientationErrorW(Matrix3f w_R_e, Matrix3f w_R_d)
  * @param[in]  xe    The current end-effector position
  * @param[in]  xd    The desired end-effector position
  * @param[in]  vd    The desired end-effector linear velocity
- * @param[in]  phie  The current end-effector euler angles
- * @param[in]  phid  The desired end-effector euler angles
- * @param[in]  phiddot  The desired end-effector angular velocity
- * @param[in]  kp    The proportional gain matrix
- * @param[in]  kphi  The proportional gain matrix
+ * @param[in]  w_R_e The current end-effector orientation
+ * @param[in]  phief The desired end-effector orientation
  *
  * @return     The joint velocities
  */
@@ -214,11 +214,8 @@ Vector3f pd(double t, Vector3f xef, Vector3f xe0)
 /**
  * @brief           This function is used to calculate the joint config matrix using the inverse differential kinematics
  *
- * @param TH0       initial joint config0
- * @param kp        proportional gain matrix
- * @param kphi      proportional gain matrix
- * @param minT      minimum time
- * @param maxT      maximum time
+ * @param xef       desired end-effector position
+ * @param phief     desired end-effector orientation
  * @param dt        time step
  * @return MatrixXf joint config matrix
  */
@@ -265,7 +262,7 @@ void invDiffKinematicControlSimComplete(Vector3f xef, Vector3f phief, float dt)
 /**
  * @brief CALLBACK function for the position topic
  * 
- * @param msg 
+ * @param msg message received
  */
 void posCallback(const motion::pos::ConstPtr &msg)
 {
