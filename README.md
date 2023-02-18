@@ -40,6 +40,8 @@ The project is structured as follows:
   - `dataset` -> contains the dataset
   - `scripts` -> contains the scripts for the vision
   - `weights` -> contains the weights 
+- `models` -> contains the lego models
+- lego.world -> the .world template
   
 ## Installation
 The project has been developed and tested on Ubuntu 20.04 with ROS Noetic, also we used the [locosim](https://github.com/mfocchi/locosim) repository for the ur5 simulation. The installation of the project is the following:
@@ -88,6 +90,13 @@ self.world_name = 'lego.world'
 ```
 Feel free to modify the world file in order to add more lego blocks and test it
 Now we are able to run the project.
+
+For last thing check if the flags REAL_ROBOT is on 0 on motionPlanner.cpp, taskManager.cpp and Vision.py then compile the project
+```BASH
+cd ~/ros_ws
+catkin_make install 
+source install/setup.bash
+```
 ### Running
 For running the project you need to run the following commands:
 1) Run in one window the locosim simulation with the following command:
