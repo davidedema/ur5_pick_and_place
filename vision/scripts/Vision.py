@@ -33,6 +33,7 @@ x_c = np.array([-0.9, 0.24, -0.35])
 base_offset = np.array([0.5, 0.35, 1.75])
 
 OFF_SET = 0.86 + 0.1
+REAL_ROBOT = 0
 
 # ---------------------- CLASS ----------------------
 
@@ -103,8 +104,11 @@ class Vision:
             for data in point_cloud2.read_points(msg, field_names=['x','y','z'], skip_nans=True, uvs=[lego.center_point]):
                 lego.point_cloud = (data[0], data[1], data[2])
 
-            # Transform point cloud to world
-            lego.point_world = w_R_c.dot(lego.point_cloud) + x_c + base_offset
+            if REAL_ROBOT:
+                lego.point_world = lego.point_cloud
+            else:
+                # Transform point cloud to world
+                lego.point_world = w_R_c.dot(lego.point_cloud) + x_c + base_offset
 
             # Show details
             lego.show()
