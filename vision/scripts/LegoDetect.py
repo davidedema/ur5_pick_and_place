@@ -92,7 +92,6 @@ class LegoDetect:
 
         print('Draw RegionOfInterest')
         roi = RegionOfInterest(img_path, IMG_ROI)
-        roi.run_auto()
         print('Detecting RegionOfInterest...')
         self.detect(IMG_ROI)
 

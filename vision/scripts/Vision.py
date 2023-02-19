@@ -33,7 +33,7 @@ x_c = np.array([-0.9, 0.24, -0.35])
 base_offset = np.array([0.5, 0.35, 1.75])
 
 OFF_SET = 0.86 + 0.1
-REAL_ROBOT = 0
+REAL_ROBOT = False
 
 # ---------------------- CLASS ----------------------
 

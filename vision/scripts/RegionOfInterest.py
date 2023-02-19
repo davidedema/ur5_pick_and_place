@@ -36,6 +36,68 @@ class RegionOfInterest:
         self.output_path = output_path
         self.img = cv2.imread(self.img_path)
 
+        # Let user choose ROI method
+        choice = '0'
+        while (choice != '1' and choice != ''):
+            ask =  ('\nROI auto     (ENTER)'+
+                    '\nROI manual   (1)'+
+                    '\nchoice ----> ')
+            choice = input(ask)
+
+        # ROI auto
+        if choice == '':
+            print('ROI AUTO...')
+            self.run_auto()
+
+        # ROI manual
+        if choice == '1':
+            self.run_manual()
+
+    def draw_box(self, event, x, y, flags, params):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            self.drawing = True
+            self.start = (x, y)
+            self.end = (x, y)
+        elif event == cv2.EVENT_MOUSEMOVE:
+            if self.drawing == True:
+                self.end = (x, y)
+        elif event == cv2.EVENT_LBUTTONUP:
+            self.drawing = False
+            self.end = (x, y)
+            self.boxes.append((self.start, self.end))
+            self.start = (-1, -1)
+            self.end = (-1, -1)
+
+    def run_manual(self):
+        self.draw_img = self.img.copy()
+        self.boxes = []
+        self.drawing = False
+        self.start = (-1, -1)
+        self.end = (-1, -1)
+
+        cv2.namedWindow('image')
+        cv2.setMouseCallback('image', self.draw_box)
+        while True:
+            temp_img = self.draw_img.copy()
+            for box in self.boxes:
+                cv2.rectangle(temp_img, box[0], box[1], (0, 255, 0), 2)
+            cv2.imshow('image', temp_img)
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('q'):
+                break
+            elif key == 13: # Check for "ENTER" button press
+                mask = np.zeros(self.img.shape[:2], dtype=np.uint8)
+                for box in self.boxes:
+                    cv2.rectangle(mask, box[0], box[1], 255, -1)
+                self.img[mask == 0] = (0, 0, 0)
+                cv2.imwrite(self.output_path, self.img)
+                self.draw_img[mask == 0] = (0, 0, 0)
+                cv2.imshow('image', self.draw_img)
+                cv2.waitKey(0)
+                break
+
+        cv2.destroyAllWindows()
+
     def run_auto(self):
         """ @brief automatically crop the region of interest depending on real camera or simulation camera
         """
@@ -66,7 +128,6 @@ class RegionOfInterest:
 # python3 RegionOfInterest.py /path/to/input/img /path/to/output/img
 if __name__ == '__main__':
     roi = RegionOfInterest(img_path=sys.argv[1], output_path=sys.argv[2])
-    roi.run()
 
 
 
