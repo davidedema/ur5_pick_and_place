@@ -64,6 +64,7 @@ int real_robot = 0;
 VectorXf TH0(6);
 /// @brief Flag to check if it is the first time that the node is called
 int first = 1;
+/// @brief Max time for the trajectory
 double maxT = 6;
 
 
