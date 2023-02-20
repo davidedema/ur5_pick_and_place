@@ -33,7 +33,7 @@ x_c = np.array([-0.9, 0.24, -0.35])
 base_offset = np.array([0.5, 0.35, 1.75])
 
 OFF_SET = 0.86 + 0.1
-REAL_ROBOT = False
+REAL_ROBOT = True
 
 # ---------------------- CLASS ----------------------
 
@@ -116,7 +116,7 @@ class Vision:
             # Create msg for pos_pub
             pos_msg = pos()
             pos_msg.class_id = lego.class_id
-            pos_msg.x = lego.point_world[0, 0]
+            pos_msg.x = lego.point_world[0, 0] + 0.007
             pos_msg.y = lego.point_world[0, 1]
             pos_msg.z = lego.point_world[0, 2]
             pos_msg.pitch = 0

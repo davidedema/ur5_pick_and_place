@@ -64,6 +64,7 @@ int real_robot = 0;
 VectorXf TH0(6);
 /// @brief Flag to check if it is the first time that the node is called
 int first = 1;
+double maxT = 6;
 
 
 // ----------- FUNCTION PROTOTIPES ----------- //
@@ -220,7 +221,7 @@ VectorXf invDiffKinematicControlComplete(VectorXf q, Vector3f xe, Vector3f xd, V
  */
 Vector3f pd(double t, Vector3f xef, Vector3f xe0)
 {
-    double t_norm = t / 5;
+    double t_norm = t / maxT;
     if (t_norm > 1)
     {
         return xef;
@@ -262,7 +263,7 @@ void invDiffKinematicControlSimComplete(Vector3f xef, Vector3f phief, float dt)
     Vector3f vd; // desired linear velocity                                                                                                                  // get the inverse kinematics matrix
 
     // loop
-    for (double i = dt; i <= 5; i += dt)
+    for (double i = dt; i <= maxT; i += dt)
     {
         now = directKin(qk); // get the current frame
 

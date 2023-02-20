@@ -57,6 +57,8 @@ int ready = 1;
 /// @brief Flag to indicate that the task manager has to stop
 int stop = 0;
 
+float Z = 0.835;
+
 // ------------------- FUNCTIONS PROTOTIPES ------------------- //
 
 Vector3f worldToBase(Vector3f xw);
@@ -115,7 +117,7 @@ int main(int argc, char **argv)
                 block_pos = worldToBase(block_pos);
                 msg.x = block_pos(0);
                 msg.y = block_pos(1);
-                msg.z = 0.82;
+                msg.z = Z;
                 msg.roll = block_rot(0);
                 msg.pitch = block_rot(1);
                 msg.yaw = block_rot(2);
